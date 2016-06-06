@@ -197,7 +197,7 @@ function firstscreen() -- scr == 1
 	head()
 	Screen.debugPrint(0,40,"Welcome to Corbenik CFW Updater!", white, TOP_SCREEN)
 	Screen.debugPrint(0,100,"Please select an option:", white, TOP_SCREEN)
-	Screen.debugPrint(0,120,"A) Update to latest stable build", white, TOP_SCREEN)
+	Screen.debugPrint(0,120,"A) Update to latest build", white, TOP_SCREEN)
 	Screen.debugPrint(0,140,"B) Quit to HBL", white, TOP_SCREEN)
 	inputscr(2, KEY_A)
 	if debugmode == 1 then
