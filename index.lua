@@ -149,6 +149,8 @@ function installnew()
 	debugWrite(0,100,"Extracting to path...", white, TOP_SCREEN)
 	if updated == 0 then
 		System.extractZIP(downloadedzip,appinstallpath)
+		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/firmware",cfwpath.."/firmware")
+		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/keys",cfwpath.."/keys")
 	end
 	debugWrite(0,120,"DONE! Press A/B to exit!", green, TOP_SCREEN)
 	updated = 1
