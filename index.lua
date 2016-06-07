@@ -57,7 +57,6 @@ end
 function servergetVars()
 	if iswifion() == 1 then
 		serverzippath = Network.requestString(servergetzippath)
-		serversmdhpath = Network.requestString(servergetsmdhpath)
 		serverver = Network.requestString(servergetzipver)
 	end
 end
