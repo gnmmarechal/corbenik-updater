@@ -122,6 +122,9 @@ function precleanup()
 end
 
 function precheck()
+	if System.getModel() == 2 or System.getModel() == 4 then
+		System.setCpuSpeed(NEW_3DS_CLOCK)
+	end	
 	if System.doesFileExist(config) then
 		configstream = io.open(config,FREAD)
 		armpayloadpath = io.read(configstream,0,io.size(configstream))
