@@ -124,7 +124,7 @@ end
 function precheck()
 	if System.doesFileExist(config) then
 		configstream = io.open(config,FREAD)
-		armpayloadpath = io.read(configstream,0,io.size(config))
+		armpayloadpath = io.read(configstream,0,io.size(configstream))
 	else
 		armpayloadpath = root.."arm9loaderhax.bin"
 	end
