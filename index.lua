@@ -147,7 +147,13 @@ function installnew()
 	end
 	debugWrite(0,100,"Extracting to path...", white, TOP_SCREEN)
 	if updated == 0 then
+		System.renameFile("/arm9loaderhax.bin", "/arm9loaderhax".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin")
 		System.extractZIP(downloadedzip,appinstallpath)
+		System.deleteFile("/arm9loaderhax.bin")
+		System.extractFromZIP(downloadedzip,"arm9loaderhax.bin",armpayloadpath)
+		if not System.doesFileExist("/arm9loaderhax.bin") then
+			System.renameFile("/arm9loaderhax".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax.bin")
+		end
 		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/firmware",cfwpath.."/firmware")
 		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/keys",cfwpath.."/keys")
 	end
