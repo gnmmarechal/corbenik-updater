@@ -2,6 +2,14 @@
 --Author: gnmmarechal
 --Runs on Lua Player Plus 3DS
 
+--Updated version check (Updated script runs off the SD Card) TODO
+--if System.doesFileExist("/corbenikupdater/index.lua") then
+	--dofile("/corbenikupdater/index.lua")
+--else
+	--System.createDirectory("/corbenikupdater")
+--end
+--End
+
 --Some variables
 System.currentDirectory("/")
 root = System.currentDirectory()
@@ -10,16 +18,17 @@ consoleerror = 0
 scr = 1
 oldpad = Controls.read()
 debugmode = 1
+updatechecked = 0
 
 --App details
 versionmajor = 0
-versionminor = 1
+versionminor = 2
 versionrev = 0
 versionstring = versionmajor.."."..versionminor.."."..versionrev
-versionrelno = 1
+versionrelno = 2
 selfname = "corbenikupdater"
 selfpath = consolehbdir..selfname.."/"
-selfexepath = selfpath..selfname..".3dsx"
+selfexepath = selfpath..selfname..".3dsx" -- This is for the 3DSX version only
 selfstring = "Corbenik CFW Updater v."..versionstring
 selfauthor = "gnmmarechal"
 
@@ -35,12 +44,36 @@ config = root..appinstallname.."-updater.cfg"
 serverpath = "http://gs2012.xyz/3ds/"..selfname.."/"
 servergetzippath = serverpath.."latest.txt"
 servergetzipver = serverpath.."version.txt"
+servergetziprel = serverpath.."rel.cfg"
 
 
 -- Colours
 white = Color.new(255,255,255)
 green = Color.new(0,240,32)
 red = Color.new(255,0,0)
+
+--Update-check functions
+
+function updatescript() -- Updates index.lua
+	--TODO
+end
+
+function checkupdate() --Checks for new version of Corbenik CFW
+	if updatechecked == 0 then
+		if System.doesFileExist("/corbenikupdater/cfw-rel.cfg") then
+			relstream = io.open("/corbenikupdater/cfw-rel.cfg",FREAD)
+			localrel = io.read(relstream,0,io.size(relstream))
+			if tonumber(serverrel) < tonumber(localrel) then
+				updated = 1
+			end
+			updatechecked = 1
+		else
+			System.createDirectory("/corbenikupdater")
+			System.downloadFile(servergetziprel, "/corbenikupdater/cfw-rel.cfg")
+			updatechecked = 1
+		end
+	end
+end
 
 -- Server/network functions
 function iswifion()
@@ -58,6 +91,7 @@ function servergetVars()
 	if iswifion() == 1 then
 		serverzippath = Network.requestString(servergetzippath)
 		serverver = Network.requestString(servergetzipver)
+		serverrel = Network.requestString(servergetziprel)
 	end
 end
 
@@ -137,6 +171,7 @@ end
 function installnew()
 	headflip = 1
 	head()
+	checkupdate()
 	debugWrite(0,60,"Downloading ZIP...", white, TOP_SCREEN)
 	if updated == 0 then
 		Network.downloadFile(serverzippath, downloadedzip)
@@ -206,7 +241,7 @@ function firstscreen() -- scr == 1
 	Screen.debugPrint(0,40,"Welcome to Corbenik CFW Updater!", white, TOP_SCREEN)
 	Screen.debugPrint(0,100,"Please select an option:", white, TOP_SCREEN)
 	Screen.debugPrint(0,120,"A) Update to latest build", white, TOP_SCREEN)
-	Screen.debugPrint(0,140,"B) Quit to HBL", white, TOP_SCREEN)
+	Screen.debugPrint(0,140,"B) Quit", white, TOP_SCREEN)
 	inputscr(2, KEY_A)
 	if debugmode == 1 then
 		inputscr(-2, KEY_L)
@@ -244,6 +279,7 @@ end
 
 runoncevars()
 iswifion()
+updatescript()
 servergetVars()
 precleanup()
 precheck()
