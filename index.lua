@@ -69,7 +69,7 @@ function checkupdate() --Checks for new version of Corbenik CFW
 			updatechecked = 1
 		else
 			System.createDirectory("/corbenikupdater")
-			System.downloadFile(servergetziprel, "/corbenikupdater/cfw-rel.cfg")
+			Network.downloadFile(servergetziprel, "/corbenikupdater/cfw-rel.cfg")
 			updatechecked = 1
 		end
 	end
