@@ -2,12 +2,24 @@
 --Author: gnmmarechal
 --Runs on Lua Player Plus 3DS
 
---Updated version check (Updated script runs off the SD Card) TODO
---if System.doesFileExist("/corbenikupdater/index.lua") then
-	--dofile("/corbenikupdater/index.lua")
---else
-	--System.createDirectory("/corbenikupdater")
---end
+-- Run updated index.lua: If a file is available on the server, that file will be downloaded and used instead.
+-- Skipped if useupdate = 0
+useupdate = 0
+updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
+-- Update script
+if System.doesFileExist("/corbenik-updater/useupdate") then
+	useupdate = 1
+else
+	useupdate = 0
+end
+if (Network.isWifiEnabled()) and useupdate == 1 then
+	if System.doesFileExist("/corbenik-updater/updatedindex.lua") then
+		System.deleteFile("/corbenik-updater/updatedindex.lua")
+	end
+	Network.downloadFile(updateserverlua, "/corbenik-updater/updatedindex.lua")
+	dofile("/corbenik-updater/updatedindex.lua")
+	System.exit()
+end	
 --End
 
 --Some variables
