@@ -66,16 +66,13 @@ red = Color.new(255,0,0)
 
 --Update-check functions
 
-function updatescript() -- Updates index.lua
-	--TODO
-end
 
 function checkupdate() --Checks for new version of Corbenik CFW -- Apparently broken
 	if updatechecked == 0 then
 		if System.doesFileExist("/corbenikupdater/cfw-rel.cfg") then
 			relstream = io.open("/corbenikupdater/cfw-rel.cfg",FREAD)
 			localrel = io.read(relstream,0,io.size(relstream))
-			if tonumber(serverrel) < tonumber(localrel) then
+			if tonumber(localrel) > tonumber(serverrel) then
 				updated = 1
 			end
 			updatechecked = 1
@@ -183,7 +180,6 @@ end
 function installnew()
 	headflip = 1
 	head()
-	checkupdate()
 	debugWrite(0,60,"Downloading ZIP...", white, TOP_SCREEN)
 	if updated == 0 then
 		Network.downloadFile(serverzippath, downloadedzip)
@@ -294,9 +290,9 @@ function debugWrite(x,y,text,color,display)
 end
 --Main loop
 
+checkupdate()
 runoncevars()
 iswifion()
-updatescript()
 servergetVars()
 precleanup()
 precheck()
