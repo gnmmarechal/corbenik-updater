@@ -23,7 +23,7 @@ updatechecked = 0
 --App details
 versionmajor = 0
 versionminor = 2
-versionrev = 0
+versionrev = 1
 versionstring = versionmajor.."."..versionminor.."."..versionrev
 versionrelno = 2
 selfname = "corbenikupdater"
@@ -58,7 +58,7 @@ function updatescript() -- Updates index.lua
 	--TODO
 end
 
-function checkupdate() --Checks for new version of Corbenik CFW
+function checkupdate() --Checks for new version of Corbenik CFW -- Apparently broken
 	if updatechecked == 0 then
 		if System.doesFileExist("/corbenikupdater/cfw-rel.cfg") then
 			relstream = io.open("/corbenikupdater/cfw-rel.cfg",FREAD)
@@ -194,6 +194,9 @@ function installnew()
 		end
 		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/firmware",cfwpath.."/firmware")
 		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/keys",cfwpath.."/keys")
+		if keepconfig == 1 then
+			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/config",cfwpath.."/config")
+		end
 	end
 	debugWrite(0,120,"DONE! Press A/B to exit!", green, TOP_SCREEN)
 	updated = 1
@@ -227,7 +230,7 @@ end
 function bottomscreen(no) -- if no = 1, the original, regular screen will show. If not, an error-screen will come up.
 	lowhead()
 	if no == 1 then	
-		--Screen.debugPrint(0,20,"Latest 3DSX: "..serverjenkinsver, green, BOTTOM_SCREEN) -- This is pretty much useless now, as builds are automated.
+		Screen.debugPrint(0,00,"Latest CFW: "..serverver, green, BOTTOM_SCREEN) 
 		Screen.debugPrint(0,20,"Author: gnmmarechal", white, BOTTOM_SCREEN)
 		Screen.debugPrint(0,40,"Special Thanks: Rinnegatamante", white, BOTTOM_SCREEN)
 	else
@@ -240,9 +243,11 @@ function firstscreen() -- scr == 1
 	head()
 	Screen.debugPrint(0,40,"Welcome to Corbenik CFW Updater!", white, TOP_SCREEN)
 	Screen.debugPrint(0,100,"Please select an option:", white, TOP_SCREEN)
-	Screen.debugPrint(0,120,"A) Update to latest build", white, TOP_SCREEN)
-	Screen.debugPrint(0,140,"B) Quit", white, TOP_SCREEN)
+	Screen.debugPrint(0,120,"A) Clean Update (Recommended)", white, TOP_SCREEN)
+	Screen.debugPrint(0,140,"X) Dirty Update (Keep Config)", white, TOP_SCREEN)
+	Screen.debugPrint(0,160,"B) Quit", white, TOP_SCREEN)
 	inputscr(2, KEY_A)
+	inputscr(4, KEY_X)
 	if debugmode == 1 then
 		inputscr(-2, KEY_L)
 	end
@@ -288,7 +293,12 @@ while true do
 	clear()
 	pad = Controls.read()
 	bottomscreen(iswifion())
+	if scr == 4 then
+		keepconfig = 1
+		installer()
+	end
 	if scr == 2 then
+		keepconfig = 0
 		installer()
 	end	
 	if scr == 0 then
