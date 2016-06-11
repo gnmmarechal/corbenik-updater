@@ -72,7 +72,7 @@ function checkupdate() --Checks for new version of Corbenik CFW -- Apparently br
 		if System.doesFileExist("/corbenikupdater/cfw-rel.cfg") then
 			relstream = io.open("/corbenikupdater/cfw-rel.cfg",FREAD)
 			localrel = io.read(relstream,0,io.size(relstream))
-			if tonumber(localrel) > tonumber(serverrel) then
+			if tonumber(localrel) >= tonumber(serverrel) then
 				updated = 1
 			end
 			updatechecked = 1
