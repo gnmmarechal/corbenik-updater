@@ -290,7 +290,7 @@ function debugWrite(x,y,text,color,display)
 end
 --Main loop
 
-checkupdate()
+--checkupdate()
 runoncevars()
 iswifion()
 servergetVars()
