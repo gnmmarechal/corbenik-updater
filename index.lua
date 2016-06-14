@@ -205,6 +205,7 @@ function installnew()
 		if keepconfig == 1 then
 			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/config",cfwpath.."/config")
 		end
+		System.deleteFile(downloadedzip)
 	end
 	debugWrite(0,120,"DONE! Press A/B to exit!", green, TOP_SCREEN)
 	updated = 1
