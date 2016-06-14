@@ -4,11 +4,16 @@
 
 -- Run updated index.lua: If a file is available on the server, that file will be downloaded and used instead.
 -- Skipped if useupdate = 0
+isupdate = 0
 useupdate = 0
 updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
 -- Update script
 if System.doesFileExist("/corbenik-updater/useupdate") then
-	useupdate = 1
+	if isupdate == 0 then
+		useupdate = 1
+	else
+		useupdate = 0
+	end
 else
 	useupdate = 0
 end
