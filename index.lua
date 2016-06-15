@@ -7,7 +7,6 @@
 isupdate = 0
 useupdate = 0
 updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
--- Any core that is not defined by the main script and minor version is lower than 3 is considered "OLD"
 -- Update script
 if isupdate == 0 then
 	coremajor = 0
@@ -55,9 +54,6 @@ selfpath = consolehbdir..selfname.."/"
 selfexepath = selfpath..selfname..".3dsx" -- This is for the 3DSX version only
 selfstring = "Corbenik CFW Updater v."..versionstring
 selfauthor = "gnmmarechal"
-if versionminor < 3 and versionmajor == 0 then
-	coreversionstring = "OLD CORE"
-end
 
 --Affected app details
 appname = "Corbenik CFW"
