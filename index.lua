@@ -40,7 +40,7 @@ updatechecked = 0
 --App details
 versionmajor = 0
 versionminor = 2
-versionrev = 2
+versionrev = 3
 versionstring = versionmajor.."."..versionminor.."."..versionrev
 versionrelno = 2
 selfname = "corbenikupdater"
