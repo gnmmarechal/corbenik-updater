@@ -7,14 +7,17 @@
 isupdate = 0
 useupdate = 0
 updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
+-- Any core that is not defined by the main script and minor version is lower than 3 is considered "OLD"
 -- Update script
+if isupdate == 0 then
+	coremajor = 0
+	coreminor = 3
+	corerev = 0
+	coreversionstring = coremajor.."."..coreminor.."."..corerev
+end
 if System.doesFileExist("/corbenik-updater/useupdate") then
 	if isupdate == 0 then
 		useupdate = 1
-		coremajor = 0
-		coreminor = 3
-		corerev = 0
-		coreversionstring = coremajor.."."..coreminor.."."..corerev
 	else
 		useupdate = 0
 	end
@@ -52,6 +55,9 @@ selfpath = consolehbdir..selfname.."/"
 selfexepath = selfpath..selfname..".3dsx" -- This is for the 3DSX version only
 selfstring = "Corbenik CFW Updater v."..versionstring
 selfauthor = "gnmmarechal"
+if versionminor < 3 then
+	coreversionstring = "OLD CORE"
+end
 
 --Affected app details
 appname = "Corbenik CFW"
@@ -248,9 +254,10 @@ end
 function bottomscreen(no) -- if no = 1, the original, regular screen will show. If not, an error-screen will come up.
 	lowhead()
 	if no == 1 then	
-		Screen.debugPrint(0,00,"Latest CFW: "..serverver, green, BOTTOM_SCREEN) 
-		Screen.debugPrint(0,20,"Author: gnmmarechal", white, BOTTOM_SCREEN)
-		Screen.debugPrint(0,40,"Special Thanks: Rinnegatamante", white, BOTTOM_SCREEN)
+		Screen.debugPrint(0,00,"Latest CFW: "..serverver, green, BOTTOM_SCREEN)
+		Screen.debugPrint(0,20,"Core Version: "..coreversionstring, white, BOTTOM_SCREEN)
+		Screen.debugPrint(0,40,"Author: gnmmarechal", white, BOTTOM_SCREEN)
+		Screen.debugPrint(0,60,"Special Thanks: Rinnegatamante", white, BOTTOM_SCREEN)
 	else
 		Screen.debugPrint(0,20,"Internet connection failed.", red, BOTTOM_SCREEN)
 	end
