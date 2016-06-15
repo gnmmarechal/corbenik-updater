@@ -11,6 +11,10 @@ updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
 if System.doesFileExist("/corbenik-updater/useupdate") then
 	if isupdate == 0 then
 		useupdate = 1
+		coremajor = 0
+		coreminor = 3
+		corerev = 0
+		coreversionstring = coremajor.."."..coreminor.."."..corerev
 	else
 		useupdate = 0
 	end
@@ -39,8 +43,8 @@ updatechecked = 0
 
 --App details
 versionmajor = 0
-versionminor = 2
-versionrev = 3
+versionminor = 3
+versionrev = 0
 versionstring = versionmajor.."."..versionminor.."."..versionrev
 versionrelno = 2
 selfname = "corbenikupdater"
