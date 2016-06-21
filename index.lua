@@ -7,6 +7,7 @@
 isupdate = 0
 useupdate = 0
 updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
+System.createDirectory("/corbenik-updater")
 --[[
 -- Update script
 if isupdate == 0 then
@@ -64,10 +65,12 @@ appinstallpath = root
 downloadedzip = root..appinstallname..".zip"
 cfwpath = appinstallpath..appinstallname
 config = root..appinstallname.."-updater.cfg"
+usechainpayload = root..appinstallname.."-updater/nochain"
 
 --Server strings (some vars are declared by functions after reading the strings from the server)
 serverpath = "http://gs2012.xyz/3ds/"..selfname.."/"
-servergetzippath = serverpath.."latest.txt"
+servergetnochainzippath = serverpath.."latest.txt"
+servergetchainzippath = serverpath.."chainlatest.txt"
 servergetzipver = serverpath.."version.txt"
 servergetziprel = serverpath.."rel.cfg"
 
@@ -181,6 +184,11 @@ function precheck()
 	if System.getModel() == 2 or System.getModel() == 4 then
 		System.setCpuSpeed(NEW_3DS_CLOCK)
 	end	
+	if System.doesFileExist(usechainpayload) then
+		servergetzippath = servergetnochainzippath
+	else
+		servergetzippath = servergetchainzippath
+	end
 	if System.doesFileExist(config) then
 		configstream = io.open(config,FREAD)
 		armpayloadpath = io.read(configstream,0,io.size(configstream))
@@ -243,7 +251,7 @@ end
 
 function errorscreen() --scr == 0
 	head()
-	Screen.debugPrint(0,40,"An error has ocurred.", white, TOP_SCREEN)
+	Screen.debugPrint(0,40,"An error has occurred.", white, TOP_SCREEN)
 	Screen.debugPrint(0,60,"Please refer to the documentation.", white, TOP_SCREEN)
 	Screen.debugPrint(0,80,"Error code: "..consoleerror, red, TOP_SCREEN)
 	Screen.debugPrint(0,100,"Press A/B to quit.", white, TOP_SCREEN)
@@ -314,9 +322,10 @@ end
 --checkupdate()
 runoncevars()
 iswifion()
+precheck()
 servergetVars()
 precleanup()
-precheck()
+
 
 while true do
 	clear()
