@@ -7,6 +7,7 @@
 isupdate = 0
 useupdate = 0
 updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
+--[[
 -- Update script
 if isupdate == 0 then
 	coremajor = 0
@@ -14,6 +15,7 @@ if isupdate == 0 then
 	corerev = 0
 	coreversionstring = coremajor.."."..coreminor.."."..corerev
 end
+--]]
 if System.doesFileExist("/corbenik-updater/useupdate") then
 	if isupdate == 0 then
 		useupdate = 1
@@ -46,9 +48,9 @@ updatechecked = 0
 --App details
 versionmajor = 0
 versionminor = 3
-versionrev = 0
+versionrev = 3
 versionstring = versionmajor.."."..versionminor.."."..versionrev
-versionrelno = 2
+versionrelno = 3
 selfname = "corbenikupdater"
 selfpath = consolehbdir..selfname.."/"
 selfexepath = selfpath..selfname..".3dsx" -- This is for the 3DSX version only
@@ -184,6 +186,12 @@ function precheck()
 		armpayloadpath = io.read(configstream,0,io.size(configstream))
 	else
 		armpayloadpath = root.."arm9loaderhax.bin"
+		if System.doesFileExist("/arm9loaderhax_si.bin") then
+			setconfigstream = io.open(config,FCREATE)
+			io.write(setconfigstream,0,"/arm9loaderhax_si.bin", 21)
+			io.close(setconfigstream)
+			precheck() --Calls itself again after setting the payload path to arm9loaderhax_si.bin.
+		end
 	end
 	
 end
@@ -250,8 +258,8 @@ end
 function bottomscreen(no) -- if no = 1, the original, regular screen will show. If not, an error-screen will come up.
 	lowhead()
 	if no == 1 then	
-		Screen.debugPrint(0,00,"Latest CFW: "..serverver, green, BOTTOM_SCREEN)
-		Screen.debugPrint(0,20,"Core Version: "..coreversionstring, white, BOTTOM_SCREEN)
+		Screen.debugPrint(0,20,"Latest CFW: "..serverver, green, BOTTOM_SCREEN)
+--		Screen.debugPrint(0,20,"Core Version: "..coreversionstring, white, BOTTOM_SCREEN)
 		Screen.debugPrint(0,40,"Author: gnmmarechal", white, BOTTOM_SCREEN)
 		Screen.debugPrint(0,60,"Special Thanks: Rinnegatamante", white, BOTTOM_SCREEN)
 	else
