@@ -4,7 +4,9 @@
 
 -- Run updated index.lua: If a file is available on the server, that file will be downloaded and used instead.
 -- Skipped if useupdate = 0
-isupdate = 1
+isupdate = 0
+iscia = 1
+usebgm = 0
 useupdate = 0
 updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
 System.createDirectory("/corbenik-updater")
@@ -36,6 +38,32 @@ if (Network.isWifiEnabled()) and useupdate == 1 then
 end	
 --End
 
+--Sound init for BGM :)
+if usebgm == 1 then
+	Sound.init()
+	if iscia == 1 then
+		if System.doesFileExist("romfs:/bgm.wav") then
+			bgm = Sound.openWav("romfs:/bgm.wav",false)
+		end
+	else
+		if System.doesFileExist("/3ds/corbenikupdater/bgm.wav") then
+			bgm = Sound.openWav("/3ds/corbenik-updater/bgm.wav",false)
+		end
+	end
+	if System.doesFileExist("/corbenik-updater/bgm.wav") then
+		bgm = Sound.openWav("/corbenik-updater/bgm.wav",false)
+	elseif System.doesFileExist("/corbenik-updater/bgm.ogg") then
+		bgm = Sound.openOgg("/corbenik-updater/bgm.ogg",false)	
+		elseif System.doesFileExist("/corbenik-updater/bgm.aiff") then
+			bgm = Sound.openAiff("/corbenik-updater/bgm.aiff",false)
+	end	
+	if bgm == nil then
+		--No BGM
+	else
+		Sound.play(bgm,LOOP)
+	end
+end
+
 --Some variables
 System.currentDirectory("/")
 root = System.currentDirectory()
@@ -49,7 +77,7 @@ updatechecked = 0
 --App details
 versionmajor = 0
 versionminor = 3
-versionrev = 3
+versionrev = 4
 versionstring = versionmajor.."."..versionminor.."."..versionrev
 versionrelno = 3
 selfname = "corbenikupdater"
@@ -329,6 +357,7 @@ precleanup()
 
 while true do
 	clear()
+
 	pad = Controls.read()
 	bottomscreen(iswifion())
 	if scr == 4 then
