@@ -5,8 +5,7 @@
 -- Run updated index.lua: If a file is available on the server, that file will be downloaded and used instead.
 -- Skipped if useupdate = 0
 isupdate = 0
-iscia = 1
-usebgm = 0
+usebgm = 1
 useupdate = 0
 updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
 System.createDirectory("/corbenik-updater")
@@ -41,21 +40,18 @@ end
 --Sound init for BGM :)
 if usebgm == 1 then
 	Sound.init()
-	if iscia == 1 then
-		if System.doesFileExist("romfs:/bgm.wav") then
-			bgm = Sound.openWav("romfs:/bgm.wav",false)
-		end
-	else
-		if System.doesFileExist("/3ds/corbenikupdater/bgm.wav") then
-			bgm = Sound.openWav("/3ds/corbenik-updater/bgm.wav",false)
-		end
+	if System.doesFileExist("romfs:/bgm.wav") then
+		bgm = Sound.openWav("romfs:/bgm.wav",false)
+	end
+	if System.doesFileExist("/3ds/corbenikupdater/bgm.wav") then
+		bgm = Sound.openWav("/3ds/corbenik-updater/bgm.wav",false)
 	end
 	if System.doesFileExist("/corbenik-updater/bgm.wav") then
 		bgm = Sound.openWav("/corbenik-updater/bgm.wav",false)
 	elseif System.doesFileExist("/corbenik-updater/bgm.ogg") then
 		bgm = Sound.openOgg("/corbenik-updater/bgm.ogg",false)	
 		elseif System.doesFileExist("/corbenik-updater/bgm.aiff") then
-			bgm = Sound.openAiff("/corbenik-updater/bgm.aiff",false)
+		bgm = Sound.openAiff("/corbenik-updater/bgm.aiff",false)
 	end	
 	if bgm == nil then
 		--No BGM
