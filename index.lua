@@ -161,6 +161,10 @@ function waitloop()
 	loop = 0
 end
 function quit()
+	if not bgm == nil then
+		Sound.close(bgm)
+		Sound.term()
+	end
 	System.exit()
 end
 
