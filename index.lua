@@ -275,6 +275,8 @@ function installnew()
 		if System.doesFileExist(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/bits/bottom.bin") then
 			System.renameFile(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/bits/bottom.bin", cfwpath.."/bits/bottom.bin")
 		end
+		System.createDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/chain")
+		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/chain",cfwpath.."/chain")
 		System.deleteFile(downloadedzip)
 	end
 	debugWrite(0,120,"DONE! Press A/B to exit!", green, TOP_SCREEN)
