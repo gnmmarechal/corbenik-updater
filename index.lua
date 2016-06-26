@@ -4,8 +4,12 @@
 
 -- Run updated index.lua: If a file is available on the server, that file will be downloaded and used instead.
 -- Skipped if useupdate = 0
-isupdate = 0
-usebgm = 1
+isupdate = 1
+if System.doesFileExist("/corbenik-updater/usebgm") then
+	usebgm = 1
+else
+	usebgm = 0
+end
 useupdate = 0
 updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
 System.createDirectory("/corbenik-updater")
@@ -73,7 +77,7 @@ updatechecked = 0
 --App details
 versionmajor = 0
 versionminor = 3
-versionrev = 4
+versionrev = 6
 versionstring = versionmajor.."."..versionminor.."."..versionrev
 versionrelno = 3
 selfname = "corbenikupdater"
@@ -161,10 +165,12 @@ function waitloop()
 	loop = 0
 end
 function quit()
-	if not bgm == nil then
+	if bgm == nil then
+	
+	else
 		Sound.close(bgm)
-		Sound.term()
 	end
+	Sound.term()
 	System.exit()
 end
 
@@ -249,10 +255,12 @@ function installnew()
 	debugWrite(0,100,"Extracting to path...", white, TOP_SCREEN)
 	if updated == 0 then
 		System.renameFile("/arm9loaderhax.bin", "/arm9loaderhax".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin")
+		System.renameFile("/arm9loaderhax_si.bin", "/arm9loaderhax_si".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin")
 		System.extractZIP(downloadedzip,appinstallpath)
 		System.deleteFile("/arm9loaderhax.bin")
 		System.extractFromZIP(downloadedzip,"arm9loaderhax.bin",armpayloadpath)
-		if not System.doesFileExist("/arm9loaderhax.bin") then
+		if not System.doesFileExist("/arm9loaderhax.bin") and not System.doesFileExist("/arm9loaderhax_si.bin") then
+			System.renameFile("/arm9loaderhax_si".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax_si.bin")
 			System.renameFile("/arm9loaderhax".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax.bin")
 		end
 		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/firmware",cfwpath.."/firmware")
@@ -260,6 +268,12 @@ function installnew()
 		if keepconfig == 1 then
 			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/config",cfwpath.."/config")
 			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/cache",cfwpath.."/cache")
+		end
+		if System.doesFileExist(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/bits/top.bin") then
+			System.renameFile(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/bits/top.bin", cfwpath.."/bits/top.bin")
+		end
+		if System.doesFileExist(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/bits/bottom.bin") then
+			System.renameFile(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/bits/bottom.bin", cfwpath.."/bits/bottom.bin")
 		end
 		System.deleteFile(downloadedzip)
 	end
