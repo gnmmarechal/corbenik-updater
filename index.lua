@@ -4,7 +4,7 @@
 
 -- Run updated index.lua: If a file is available on the server, that file will be downloaded and used instead.
 -- Skipped if useupdate = 0
-isupdate = 1
+isupdate = 0
 if System.doesFileExist("/corbenik-updater/usebgm") then
 	usebgm = 1
 else
@@ -314,7 +314,9 @@ function bottomscreen(no) -- if no = 1, the original, regular screen will show. 
 		Screen.debugPrint(0,20,"Latest CFW: "..serverver, green, BOTTOM_SCREEN)
 --		Screen.debugPrint(0,20,"Core Version: "..coreversionstring, white, BOTTOM_SCREEN)
 		Screen.debugPrint(0,40,"Author: gnmmarechal", white, BOTTOM_SCREEN)
-		Screen.debugPrint(0,60,"Special Thanks: Rinnegatamante", white, BOTTOM_SCREEN)
+		Screen.debugPrint(0,60,"Special Thanks:", white, BOTTOM_SCREEN)
+		Screen.debugPrint(0,80,"Rinnegatamante (LPP-3DS)", white, BOTTOM_SCREEN)
+		Screen.debugPrint(0,100,"Crystal the Glaceon (Testing)", white, BOTTOM_SCREEN)
 	else
 		Screen.debugPrint(0,20,"Internet connection failed.", red, BOTTOM_SCREEN)
 	end
