@@ -76,8 +76,8 @@ updatechecked = 0
 
 --App details
 versionmajor = 0
-versionminor = 3
-versionrev = 6
+versionminor = 4
+versionrev = 0
 versionstring = versionmajor.."."..versionminor.."."..versionrev
 versionrelno = 3
 selfname = "corbenikupdater"
@@ -99,6 +99,7 @@ usechainpayload = root..appinstallname.."-updater/nochain"
 serverpath = "http://gs2012.xyz/3ds/"..selfname.."/"
 servergetnochainzippath = serverpath.."latest.txt"
 servergetchainzippath = serverpath.."chainlatest.txt"
+servergetnightlyzippath = serverpath.."latest-nightly.txt" 
 servergetzipver = serverpath.."version.txt"
 servergetziprel = serverpath.."rel.cfg"
 
@@ -223,6 +224,10 @@ function precheck()
 	else
 		servergetzippath = servergetchainzippath
 	end
+	if System.doesFileExist(nightlyfile) then
+		servergetzippath = servergetnightlypath
+		usenightly = 1	
+	end
 	if System.doesFileExist(config) then
 		configstream = io.open(config,FREAD)
 		armpayloadpath = io.read(configstream,0,io.size(configstream))
@@ -329,7 +334,10 @@ function firstscreen() -- scr == 1
 	Screen.debugPrint(0,100,"Please select an option:", white, TOP_SCREEN)
 	Screen.debugPrint(0,120,"A) Clean Update (Recommended)", white, TOP_SCREEN)
 	Screen.debugPrint(0,140,"X) Dirty Update (Keep Config)", white, TOP_SCREEN)
-	Screen.debugPrint(0,160,"B) Quit", white, TOP_SCREEN)
+	if usenightly == 1 then
+		Screen.debugPrint(0,160,"Y) Nightly Update (Keep Config)", white, TOP_SCREEN)	
+	end
+	Screen.debugPrint(0,180,"B) Quit", white, TOP_SCREEN)
 	inputscr(2, KEY_A)
 	inputscr(4, KEY_X)
 	if debugmode == 1 then
@@ -379,11 +387,17 @@ while true do
 
 	pad = Controls.read()
 	bottomscreen(iswifion())
+	if scr == 5 and usenightly == 1 then
+		isnightly = 1
+		keepconfig = 1
+		installer()
 	if scr == 4 then
+		isnightly = 0
 		keepconfig = 1
 		installer()
 	end
 	if scr == 2 then
+		isnightly = 0
 		keepconfig = 0
 		installer()
 	end	
