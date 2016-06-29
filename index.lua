@@ -46,22 +46,22 @@ if usebgm == 1 then
 	Sound.init()
 	if System.doesFileExist("romfs:/bgm.wav") then
 		bgm = Sound.openWav("romfs:/bgm.wav",false)
+		Sound.play(bgm,LOOP)
 	end
 	if System.doesFileExist("/3ds/corbenikupdater/bgm.wav") then
 		bgm = Sound.openWav("/3ds/corbenik-updater/bgm.wav",false)
+		Sound.play(bgm,LOOP)
 	end
 	if System.doesFileExist("/corbenik-updater/bgm.wav") then
 		bgm = Sound.openWav("/corbenik-updater/bgm.wav",false)
+		Sound.play(bgm,LOOP)
 	elseif System.doesFileExist("/corbenik-updater/bgm.ogg") then
 		bgm = Sound.openOgg("/corbenik-updater/bgm.ogg",false)	
-		elseif System.doesFileExist("/corbenik-updater/bgm.aiff") then
-		bgm = Sound.openAiff("/corbenik-updater/bgm.aiff",false)
-	end	
-	if bgm == nil then
-		--No BGM
-	else
 		Sound.play(bgm,LOOP)
-	end
+	elseif System.doesFileExist("/corbenik-updater/bgm.aiff") then
+		bgm = Sound.openAiff("/corbenik-updater/bgm.aiff",false)
+		Sound.play(bgm,LOOP)
+	end	
 end
 
 --Some variables
@@ -77,7 +77,7 @@ updatechecked = 0
 --App details
 versionmajor = 0
 versionminor = 4
-versionrev = 0
+versionrev = 1
 versionstring = versionmajor.."."..versionminor.."."..versionrev
 versionrelno = 3
 selfname = "corbenikupdater"
@@ -94,6 +94,7 @@ downloadedzip = root..appinstallname..".zip"
 cfwpath = appinstallpath..appinstallname
 config = root..appinstallname.."-updater.cfg"
 usechainpayload = root..appinstallname.."-updater/nochain"
+nightlyfile = root..appinstallname.."-updater/usenightly"
 
 --Server strings (some vars are declared by functions after reading the strings from the server)
 serverpath = "http://gs2012.xyz/3ds/"..selfname.."/"
@@ -225,8 +226,10 @@ function precheck()
 		servergetzippath = servergetchainzippath
 	end
 	if System.doesFileExist(nightlyfile) then
-		servergetzippath = servergetnightlypath
+		servergetzippath = servergetnightlyzippath
 		usenightly = 1	
+	else
+		usenightly = 0
 	end
 	if System.doesFileExist(config) then
 		configstream = io.open(config,FREAD)
@@ -282,6 +285,10 @@ function installnew()
 		end
 		System.createDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/chain")
 		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/chain",cfwpath.."/chain")
+		if isnightly == 1 then
+			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/locale",cfwpath.."/locale")
+			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/contrib",cfwpath.."/contrib")
+		end
 		System.deleteFile(downloadedzip)
 	end
 	debugWrite(0,120,"DONE! Press A/B to exit!", green, TOP_SCREEN)
@@ -340,6 +347,7 @@ function firstscreen() -- scr == 1
 	Screen.debugPrint(0,180,"B) Quit", white, TOP_SCREEN)
 	inputscr(2, KEY_A)
 	inputscr(4, KEY_X)
+	inputscr(5, KEY_Y)
 	if debugmode == 1 then
 		inputscr(-2, KEY_L)
 	end
@@ -391,6 +399,7 @@ while true do
 		isnightly = 1
 		keepconfig = 1
 		installer()
+	end	
 	if scr == 4 then
 		isnightly = 0
 		keepconfig = 1
