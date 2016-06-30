@@ -4,7 +4,7 @@
 
 -- Run updated index.lua: If a file is available on the server, that file will be downloaded and used instead.
 -- Skipped if useupdate = 0
-isupdate = 1
+isupdate = 0
 if System.doesFileExist("/corbenik-updater/usebgm") then
 	usebgm = 1
 else
@@ -77,7 +77,7 @@ updatechecked = 0
 --App details
 versionmajor = 0
 versionminor = 4
-versionrev = 1
+versionrev = 2
 versionstring = versionmajor.."."..versionminor.."."..versionrev
 versionrelno = 3
 selfname = "corbenikupdater"
@@ -132,7 +132,7 @@ end
 
 -- Server/network functions
 function iswifion()
-	if (Network.isWifiEnabled()) then
+	if (Network.isWifiEnabled()) or updated == 1 then
 		return 1
 	else
 		consoleerror = 1
@@ -187,6 +187,9 @@ function inputscr(newscr, inputkey)
 		if newscr == -1 then
 			quit()
 		end
+		if newscr == -4 then
+			System.reboot()
+		end
 		Screen.clear(TOP_SCREEN)
 		scr = newscr
 	end	
@@ -197,6 +200,9 @@ function nextscr(skrin)
 	inputscr(skrin, KEY_A)
 end
 
+function checkreboot()
+	inputscr(-4, KEY_A)
+end
 function checkquit()
 	inputscr(-1, KEY_B)
 end
@@ -219,6 +225,9 @@ end
 function precheck()
 	if System.getModel() == 2 or System.getModel() == 4 then
 		System.setCpuSpeed(NEW_3DS_CLOCK)
+		newconsole = 1
+	else
+		newconsole = 0
 	end	
 	if System.doesFileExist(usechainpayload) then
 		servergetzippath = servergetnochainzippath
@@ -230,6 +239,17 @@ function precheck()
 		usenightly = 1	
 	else
 		usenightly = 0
+	end
+	if not System.doesFileExist(cfwpath.."/firmware/native") then
+		usenightly = 0
+		if System.doesFileExist(usechainpayload) then
+			servergetzippath = servergetnochainzippath
+		else
+			servergetzippath = servergetchainzippath
+		end
+		newinstall = 1
+	else
+		newinstall = 0
 	end
 	if System.doesFileExist(config) then
 		configstream = io.open(config,FREAD)
@@ -246,6 +266,13 @@ function precheck()
 	
 end
 
+function installfilechecker()	
+	if newinstall == 1 then
+		if not System.doesFileExist("/corbenik-updater/firmware.bin") then
+		
+		end
+	end
+end
 function installnew()
 	headflip = 1
 	head()
@@ -291,7 +318,7 @@ function installnew()
 		end
 		System.deleteFile(downloadedzip)
 	end
-	debugWrite(0,120,"DONE! Press A/B to exit!", green, TOP_SCREEN)
+	debugWrite(0,120,"DONE! Press A to reboot, B to quit!", green, TOP_SCREEN)
 	updated = 1
 end
 
@@ -359,6 +386,7 @@ function installer() --scr == 2 / scr == 4
 	debugWrite(0,40,"Started Installation...", white, TOP_SCREEN)
 	installnew()
 	checkquit()
+	checkreboot()
 	checkrestart()
 end
 
