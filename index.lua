@@ -5,7 +5,7 @@
 -- Run updated index.lua: If a file is available on the server, that file will be downloaded and used instead.
 -- Skipped if useupdate = 0
 isupdate = 1
-if System.doesFileExist("/corbenik-updater/usebgm") then
+if System.doesFileExist("/corbenik-updater/usebgm") or System.doesFileExist("/skeith-updater/usebgm") then
 	usebgm = 1
 else
 	usebgm = 0
