@@ -6,11 +6,11 @@
 -- Skipped if useupdate = 0
 isupdate = 1
 
---[[
+
 if not System.doesFileExist("/skeith/firmware/native") and System.doesFileExist("/corbenik-updater/useskeith") then -- Stops people without Skeith from using the wrong updater.
 	System.deleteFile("/corbenik-updater/useskeith")
 end
---]]
+
 useupdate = 0
 updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
 skeithupdateserverlua = "http://gs2012.xyz/3ds/skeithupdater/updatedindex.lua"
