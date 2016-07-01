@@ -21,6 +21,9 @@ if System.doesFileExist("/corbenik-updater/useskeith") then
 else
 	skeithusage = 0
 end
+if not Network.isWifiEnabled() then
+	error("Failed to connect to the network.")
+end
 if System.doesFileExist("romfs:/skeithindex.lua") and skeithusage == 1 then
 	dofile("romfs:/skeithindex.lua")
 elseif not System.doesFileExist("romfs:/skeithindex.lua") and skeithusage == 1 then
