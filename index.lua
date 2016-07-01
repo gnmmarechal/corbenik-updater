@@ -17,14 +17,14 @@ skeithupdateserverlua = "http://gs2012.xyz/3ds/skeithupdater/updatedindex.lua"
 System.createDirectory("/corbenik-updater")
 System.createDirectory("/skeith-updater")
 --Switches to Skeith script if setting is found.
---[[
+
 if System.doesFileExist("/corbenik-updater/useskeith") then -- Checks if it should switch to Skeith AND if Corbenik exists. If not, it'll default to Skeith.
 	skeithusage = 1
 else
 	skeithusage = 0
 
 end
---]]
+
 if not Network.isWifiEnabled() then --Checks for Wi-Fi
 	error("Failed to connect to the network.")
 end
