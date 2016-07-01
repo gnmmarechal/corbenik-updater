@@ -4,7 +4,7 @@
 
 -- Run updated index.lua: If a file is available on the server, that file will be downloaded and used instead.
 -- Skipped if useupdate = 0
-isupdate = 0
+isupdate = 1
 if System.doesFileExist("/corbenik-updater/usebgm") then
 	usebgm = 1
 else
@@ -188,6 +188,11 @@ function inputscr(newscr, inputkey)
 			quit()
 		end
 		if newscr == -4 then
+			if bgm == nil then
+			else
+				Sound.close(bgm)
+			end
+			Sound.term()
 			System.reboot()
 		end
 		Screen.clear(TOP_SCREEN)
