@@ -9,11 +9,7 @@ isupdate = 1
 if not System.doesFileExist("/skeith/firmware/native") and System.doesFileExist("/corbenik-updater/useskeith") then -- Stops people without Skeith from using the wrong updater.
 	System.deleteFile("/corbenik-updater/useskeith")
 end
-if System.doesFileExist("/corbenik-updater/usebgm") or System.doesFileExist("/skeith-updater/usebgm") then
-	usebgm = 1
-else
-	usebgm = 0
-end
+
 useupdate = 0
 updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
 skeithupdateserverlua = "http://gs2012.xyz/3ds/skeithupdater/updatedindex.lua"
@@ -70,6 +66,11 @@ end
 --End
 
 --Sound init for BGM :)
+if System.doesFileExist("/corbenik-updater/usebgm") or System.doesFileExist("/skeith-updater/usebgm") then
+	usebgm = 1
+else
+	usebgm = 0
+end
 if usebgm == 1 then
 	Sound.init()
 	if System.doesFileExist("romfs:/bgm.wav") then

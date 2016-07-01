@@ -4,12 +4,8 @@
 
 -- Run updated index.lua: If a file is available on the server, that file will be downloaded and used instead.
 -- Skipped if useupdate = 0
-isupdate = 0
-if System.doesFileExist("/skeith-updater/usebgm") or System.doesFileExist("/corbenik-updater/usebgm") then
-	usebgm = 1
-else
-	usebgm = 0
-end
+isupdate = 1
+
 useupdate = 0
 updateserverlua = "http://gs2012.xyz/3ds/skeithupdater/updatedindex.lua"
 System.createDirectory("/skeith-updater")
@@ -34,6 +30,11 @@ end
 --End
 
 --Sound init for BGM :)
+if System.doesFileExist("/skeith-updater/usebgm") or System.doesFileExist("/corbenik-updater/usebgm") then
+	usebgm = 1
+else
+	usebgm = 0
+end
 if usebgm == 1 then
 	Sound.init()
 	if System.doesFileExist("romfs:/bgm.wav") then
