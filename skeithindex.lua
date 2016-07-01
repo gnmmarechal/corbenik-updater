@@ -68,8 +68,8 @@ updatechecked = 0
 
 --App details
 versionmajor = 0
-versionminor = 4
-versionrev = 2
+versionminor = 5
+versionrev = 0
 versionstring = versionmajor.."."..versionminor.."."..versionrev
 versionrelno = 1
 selfname = "skeithupdater"
