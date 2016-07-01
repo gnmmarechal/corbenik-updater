@@ -1,4 +1,4 @@
---Corbenik CFW Updater
+--Corbenik/Skeith CFW Updater - Corbenik Updater Script
 --Author: gnmmarechal
 --Runs on Lua Player Plus 3DS
 
@@ -11,8 +11,10 @@ else
 	usebgm = 0
 end
 useupdate = 0
-updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
+corbenikupdateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
+skeithupdateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
 System.createDirectory("/corbenik-updater")
+System.createDirectory("/skeith-updater")
 --[[
 -- Update script
 if isupdate == 0 then
@@ -35,10 +37,21 @@ if (Network.isWifiEnabled()) and useupdate == 1 then
 	if System.doesFileExist("/corbenik-updater/updatedindex.lua") then
 		System.deleteFile("/corbenik-updater/updatedindex.lua")
 	end
-	Network.downloadFile(updateserverlua, "/corbenik-updater/updatedindex.lua")
-	dofile("/corbenik-updater/updatedindex.lua")
+	if System.doesFileExist("/skeith-updater/updatedindex.lua") then
+		System.deleteFile("/skeith-updater/updatedindex.lua")
+	end
+	if System.doesFileExist("/corbenik-updater/useskeith") then
+		rundir = "/skeith-updater"
+		updateserverlua = skeithupdateserverlua
+	else
+		rundir = "/corbenik-updater"
+		updateserverlua = corbenikupdateserverlua
+	end
+	Network.downloadFile(updateserverlua, rundir.."/updatedindex.lua")
+	dofile(rundir.."/updatedindex.lua")
 	System.exit()
 end	
+--If not running the updated script, it'll run either this script or the skeith script off romfs
 --End
 
 --Sound init for BGM :)
