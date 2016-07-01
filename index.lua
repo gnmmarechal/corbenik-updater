@@ -6,27 +6,33 @@
 -- Skipped if useupdate = 0
 isupdate = 1
 
+--[[
 if not System.doesFileExist("/skeith/firmware/native") and System.doesFileExist("/corbenik-updater/useskeith") then -- Stops people without Skeith from using the wrong updater.
 	System.deleteFile("/corbenik-updater/useskeith")
 end
-
+--]]
 useupdate = 0
 updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
 skeithupdateserverlua = "http://gs2012.xyz/3ds/skeithupdater/updatedindex.lua"
 System.createDirectory("/corbenik-updater")
 System.createDirectory("/skeith-updater")
 --Switches to Skeith script if setting is found.
-if System.doesFileExist("/corbenik-updater/useskeith") or not System.doesFileExist("/corbenik/firmware/native") then -- Checks if it should switch to Skeith AND if Corbenik exists. If not, it'll default to Skeith.
+--[[
+if System.doesFileExist("/corbenik-updater/useskeith") then -- Checks if it should switch to Skeith AND if Corbenik exists. If not, it'll default to Skeith.
 	skeithusage = 1
 else
 	skeithusage = 0
+
 end
+--]]
 if not Network.isWifiEnabled() then --Checks for Wi-Fi
 	error("Failed to connect to the network.")
 end
 if not System.doesFileExist("/corbenik/firmware/native") and not System.doesFileExist("/skeith/firmware/native") then -- Avoids people without Corbenik or Skeith on their SD Card from using the updater.
 	error("Corbenik/Skeith CFW not found. Please install one or both.")
 end
+
+--[[
 if System.doesFileExist("romfs:/skeithindex.lua") and skeithusage == 1 then
 	dofile("romfs:/skeithindex.lua")
 elseif not System.doesFileExist("romfs:/skeithindex.lua") and skeithusage == 1 then
@@ -37,6 +43,7 @@ elseif not System.doesFileExist("romfs:/skeithindex.lua") and skeithusage == 1 t
 	dofile("/skeith-updater/updatedindex.lua")
 	System.exit()	
 end
+--]]
 --[[
 -- Update script
 if isupdate == 0 then
@@ -66,7 +73,7 @@ end
 --End
 
 --Sound init for BGM :)
-if System.doesFileExist("/corbenik-updater/usebgm") or System.doesFileExist("/skeith-updater/usebgm") then
+if System.doesFileExist("/corbenik-updater/usebgm") then
 	usebgm = 1
 else
 	usebgm = 0
@@ -78,7 +85,7 @@ if usebgm == 1 then
 		Sound.play(bgm,LOOP)
 	end
 	if System.doesFileExist("/3ds/corbenikupdater/bgm.wav") then
-		bgm = Sound.openWav("/3ds/corbenik-updater/bgm.wav",false)
+		bgm = Sound.openWav("/3ds/corbenikupdater/bgm.wav",false)
 		Sound.play(bgm,LOOP)
 	end
 	if System.doesFileExist("/corbenik-updater/bgm.wav") then
