@@ -20,12 +20,14 @@ updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
 skeithupdateserverlua = "http://gs2012.xyz/3ds/skeithupdater/updatedindex.lua"
 System.createDirectory("/corbenik-updater")
 System.createDirectory("/skeith-updater")
+--[[
 if System.doesFileExist("/skeith-updater/updatedindex.lua") then
 	System.deleteFile("/skeith-updater/updatedindex.lua")
 end
 if System.doesFileExist("/corbenik-updater/updatedindex.lua") then
 	System.deleteFile("/corbenik-updater/updatedindex.lua")
 end
+--]]
 if not Network.isWifiEnabled() then --Checks for Wi-Fi
 	error("Failed to connect to the network.")
 end
@@ -411,6 +413,8 @@ function bottomscreen(no) -- if no = 1, the original, regular screen will show. 
 		Screen.debugPrint(0,60,"Special Thanks:", white, BOTTOM_SCREEN)
 		Screen.debugPrint(0,80,"Rinnegatamante (LPP-3DS)", white, BOTTOM_SCREEN)
 		Screen.debugPrint(0,100,"Crystal the Glaceon (Testing)", white, BOTTOM_SCREEN)
+		srv = Sound.getService()
+		--Screen.debugPrint(0,120,srv, white, BOTTOM_SCREEN) -- Displays used audio-service
 	else
 		Screen.debugPrint(0,20,"Internet connection failed.", red, BOTTOM_SCREEN)
 	end
