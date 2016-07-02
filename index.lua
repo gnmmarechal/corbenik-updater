@@ -79,7 +79,7 @@ end
 --End
 
 --Sound init for BGM :)
-if System.doesFileExist("/corbenik-updater/usebgm") then
+if System.doesFileExist("/corbenik-updater/usebgm") or System.doesFileExist("/skeith-updater/usebgm") then
 	usebgm = 1
 else
 	usebgm = 0
