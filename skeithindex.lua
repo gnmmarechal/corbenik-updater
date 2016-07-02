@@ -30,8 +30,12 @@ end
 --End
 
 --Sound init for BGM :)
-if System.doesFileExist("/skeith-updater/usebgm") or System.doesFileExist("/corbenik-updater/usebgm") then
-	usebgm = 1
+if System.doesFileExist("/corbenik-updater/usebgm") or System.doesFileExist("/skeith-updater/usebgm") then
+	if not Sound.getService() == "csnd:SND" and System.doesFileExist("/3ds/dspfirm.cdc") then --csnd seems glitchy. I'll disable BGM for older releases of lpp.
+		usebgm = 1
+	else
+		usebgm = 0
+	end
 else
 	usebgm = 0
 end
