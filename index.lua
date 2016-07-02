@@ -32,10 +32,9 @@ if not System.doesFileExist("/corbenik/firmware/native") and not System.doesFile
 	error("Corbenik/Skeith CFW not found. Please install one or both.")
 end
 
-
+--[[
 if System.doesFileExist("romfs:/skeithindex.lua") and skeithusage == 1 then
 	dofile("romfs:/skeithindex.lua")
-	System.exit()
 elseif not System.doesFileExist("romfs:/skeithindex.lua") and skeithusage == 1 then
 	if System.doesFileExist("/skeith-updater/updatedindex.lua") then
 		System.deleteFile("/skeith-updater/updatedindex.lua")
@@ -44,7 +43,7 @@ elseif not System.doesFileExist("romfs:/skeithindex.lua") and skeithusage == 1 t
 	dofile("/skeith-updater/updatedindex.lua")
 	System.exit()	
 end
-
+--]]
 --[[
 -- Update script
 if isupdate == 0 then
