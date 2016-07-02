@@ -4,13 +4,13 @@
 
 -- Run updated index.lua: If a file is available on the server, that file will be downloaded and used instead.
 -- Skipped if useupdate = 0
-isupdate = 1
+isupdate = 0
 
 useupdate = 0
 updateserverlua = "http://gs2012.xyz/3ds/skeithupdater/updatedindex.lua"
 System.createDirectory("/skeith-updater")
 
-if System.doesFileExist("/skeith-updater/useupdate") then
+if System.doesFileExist("/skeith-updater/useupdate") or System.doesFileExist("/corbenik-updater/useupdate") then
 	if isupdate == 0 then
 		useupdate = 1
 	else

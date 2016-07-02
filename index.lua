@@ -16,14 +16,7 @@ updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
 skeithupdateserverlua = "http://gs2012.xyz/3ds/skeithupdater/updatedindex.lua"
 System.createDirectory("/corbenik-updater")
 System.createDirectory("/skeith-updater")
---Switches to Skeith script if setting is found.
 
-if System.doesFileExist("/corbenik-updater/useskeith") then -- Checks if it should switch to Skeith AND if Corbenik exists. If not, it'll default to Skeith.
-	skeithusage = 1
-else
-	skeithusage = 0
-
-end
 
 if not Network.isWifiEnabled() then --Checks for Wi-Fi
 	error("Failed to connect to the network.")
@@ -31,10 +24,23 @@ end
 if not System.doesFileExist("/corbenik/firmware/native") and not System.doesFileExist("/skeith/firmware/native") then -- Avoids people without Corbenik or Skeith on their SD Card from using the updater.
 	error("Corbenik/Skeith CFW not found. Please install one or both.")
 end
+--Switches to Skeith script if setting is found.
+
+if System.doesFileExist("/corbenik-updater/useskeith") then -- Checks if it should switch to Skeith AND if Corbenik exists. If not, it'll default to Skeith.
+	skeithusage = 1
+	if System.doesFileExist("/skeith-updater/updatedindex.lua") then
+		System.deleteFile("/skeith-updater/updatedindex.lua")
+	end
+	Network.downloadFile(skeithupdateserverlua, "/skeith-updater/updatedindex.lua")
+	dofile("/skeith-updater/updatedindex.lua")
+	System.exit()	
+else
+	skeithusage = 0
+
+end
 
 --[[
 if System.doesFileExist("romfs:/skeithindex.lua") and skeithusage == 1 then
-	dofile("romfs:/skeithindex.lua")
 elseif not System.doesFileExist("romfs:/skeithindex.lua") and skeithusage == 1 then
 	if System.doesFileExist("/skeith-updater/updatedindex.lua") then
 		System.deleteFile("/skeith-updater/updatedindex.lua")
