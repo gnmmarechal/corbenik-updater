@@ -1,10 +1,10 @@
---Skeith CFW Updatern(Merged from https://github.com/gnmmarechal/skeith-updater into Corbenik Updater)
+--Skeith CFW Updater (Merged from https://github.com/gnmmarechal/skeith-updater into Corbenik Updater)
 --Author: gnmmarechal
 --Runs on Lua Player Plus 3DS
 
 -- Run updated index.lua: If a file is available on the server, that file will be downloaded and used instead.
 -- Skipped if useupdate = 0
-isupdate = 1
+isupdate = 1 -- This isn't to be changed on the Skeith script.
 
 useupdate = 0
 updateserverlua = "http://gs2012.xyz/3ds/skeithupdater/updatedindex.lua"
