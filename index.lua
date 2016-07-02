@@ -90,11 +90,15 @@ end
 
 --Sound init for BGM :)
 if System.doesFileExist("/corbenik-updater/usebgm") or System.doesFileExist("/skeith-updater/usebgm") then
-	usebgm = 1
+	if not Sound.getService() == "csnd:SND" and System.doesFileExist("/3ds/dspfirm.cdc") then --csnd seems glitchy. I'll disable BGM for older releases of lpp.
+		usebgm = 1
+	else
+		usebgm = 0
+	end
 else
 	usebgm = 0
 end
-if usebgm == 1 then
+if usebgm == 1 then 
 	Sound.init()
 	if System.doesFileExist("romfs:/bgm.wav") then
 		bgm = Sound.openWav("romfs:/bgm.wav",false)
@@ -411,10 +415,9 @@ function bottomscreen(no) -- if no = 1, the original, regular screen will show. 
 --		Screen.debugPrint(0,20,"Core Version: "..coreversionstring, white, BOTTOM_SCREEN)
 		Screen.debugPrint(0,40,"Author: gnmmarechal", white, BOTTOM_SCREEN)
 		Screen.debugPrint(0,60,"Special Thanks:", white, BOTTOM_SCREEN)
-		Screen.debugPrint(0,80,"Rinnegatamante (LPP-3DS)", white, BOTTOM_SCREEN)
+		Screen.debugPrint(0,80,"Rinnegatamante (LPP-3DS/Help Compiling)", white, BOTTOM_SCREEN)
 		Screen.debugPrint(0,100,"Crystal the Glaceon (Testing)", white, BOTTOM_SCREEN)
-		srv = Sound.getService()
-		--Screen.debugPrint(0,120,srv, white, BOTTOM_SCREEN) -- Displays used audio-service
+		--Screen.debugPrint(0,120,Sound.getService(), white, BOTTOM_SCREEN) -- Displays used audio-service
 	else
 		Screen.debugPrint(0,20,"Internet connection failed.", red, BOTTOM_SCREEN)
 	end
