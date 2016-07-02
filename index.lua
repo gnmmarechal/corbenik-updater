@@ -4,7 +4,7 @@
 
 -- Run updated index.lua: If a file is available on the server, that file will be downloaded and used instead.
 -- Skipped if useupdate = 0
-isupdate = 0
+isupdate = 1
 
 
 if not System.doesFileExist("/skeith/firmware/native") and System.doesFileExist("/corbenik-updater/useskeith") then -- Stops people without Skeith from using the wrong updater.
@@ -20,8 +20,12 @@ updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
 skeithupdateserverlua = "http://gs2012.xyz/3ds/skeithupdater/updatedindex.lua"
 System.createDirectory("/corbenik-updater")
 System.createDirectory("/skeith-updater")
-
-
+if System.doesFileExist("/skeith-updater/updatedindex.lua") then
+	System.deleteFile("/skeith-updater/updatedindex.lua")
+end
+if System.doesFileExist("/corbenik-updater/updatedindex.lua") then
+	System.deleteFile("/corbenik-updater/updatedindex.lua")
+end
 if not Network.isWifiEnabled() then --Checks for Wi-Fi
 	error("Failed to connect to the network.")
 end
