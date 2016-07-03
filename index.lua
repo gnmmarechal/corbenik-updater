@@ -11,7 +11,7 @@ if not System.doesFileExist("/skeith/firmware/native") and System.doesFileExist(
 	System.deleteFile("/corbenik-updater/useskeith")
 end
 if not System.doesFileExist("/corbenik/firmware/native") and System.doesFileExist("/skeith/firmware/native") then --If Corbenik isn't found but Skeith is, force Skeith updater.
-	skeithstream = io.open("/corbenikupdater/useskeith",FCREATE)
+	skeithstream = io.open("/corbenik-updater/useskeith",FCREATE)
 	io.write(skeithstream,0,"SkeithCFW", 9)
 	io.close(skeithstream)
 end
