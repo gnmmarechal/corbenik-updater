@@ -22,6 +22,8 @@ http://gs2012.xyz
 
 2.2) If you want to hear a cool BGM while updating, place a file named /corbenik-updater/bgm.wav or download the BGM Edition of the updater, then create a file named /corbenik-updater/usebgm .
 
+2.3) If you have Skeith, and want to update Skeith instead of Corbenik, make a file named /corbenik-updater/useskeith .
+
 
 3) If your Corbenik payload is not named "/arm9loaderhax.bin" or "/arm9loaderhax_si.bin", create a file named "/corbenik-updater.cfg" and write the path there. (ex. "/somefolder/thisiscorbenik.bin")
 
