@@ -417,6 +417,8 @@ function bottomscreen(no) -- if no = 1, the original, regular screen will show. 
 		Screen.debugPrint(0,60,"Special Thanks:", white, BOTTOM_SCREEN)
 		Screen.debugPrint(0,80,"Rinnegatamante (LPP-3DS/Help)", white, BOTTOM_SCREEN)
 		Screen.debugPrint(0,100,"Crystal the Glaceon (Testing)", white, BOTTOM_SCREEN)
+		Screen.debugPrint(0,160,"Portugal Euro 2016!!!!", red, BOTTOM_SCREEN)
+		Screen.debugPrint(0,180,"Portugal Euro 2016!!!!", green, BOTTOM_SCREEN)
 		--Screen.debugPrint(0,120,Sound.getService(), white, BOTTOM_SCREEN) -- Displays used audio-service
 	else
 		Screen.debugPrint(0,20,"Internet connection failed.", red, BOTTOM_SCREEN)
