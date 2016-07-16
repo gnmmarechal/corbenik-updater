@@ -4,7 +4,7 @@
 
 -- Run updated index.lua: If a file is available on the server, that file will be downloaded and used instead.
 -- Skipped if useupdate = 0
-isupdate = 1
+isupdate = 0
 
 
 if not System.doesFileExist("/skeith/firmware/native") and System.doesFileExist("/corbenik-updater/useskeith") then -- Stops people without Skeith from using the wrong updater.
@@ -133,7 +133,7 @@ updatechecked = 0
 --App details
 versionmajor = 0
 versionminor = 5
-versionrev = 0
+versionrev = 2
 versionstring = versionmajor.."."..versionminor.."."..versionrev
 versionrelno = 3
 selfname = "corbenikupdater"
@@ -165,6 +165,7 @@ servergetziprel = serverpath.."rel.cfg"
 white = Color.new(255,255,255)
 green = Color.new(0,240,32)
 red = Color.new(255,0,0)
+yellow = Color.new(255,255,0)
 
 --Update-check functions
 
@@ -207,6 +208,15 @@ function servergetVars()
 end
 
 --System functions
+function fileCopy(input, output)
+	inputstream = io.open(input, FREAD)
+	inputstring = io.read(inputstream,0,io.size(inputstream))
+	outputstream = io.open(output, FCREATE)
+	io.write(outputstream, 0, inputstring, io.size(inputstream))
+	io.close(inputstream)
+	io.close(outputstream)
+	
+end
 function clear()
 
 	Screen.refresh()
@@ -418,7 +428,8 @@ function bottomscreen(no) -- if no = 1, the original, regular screen will show. 
 		Screen.debugPrint(0,80,"Rinnegatamante (LPP-3DS/Help)", white, BOTTOM_SCREEN)
 		Screen.debugPrint(0,100,"Crystal the Glaceon (Testing)", white, BOTTOM_SCREEN)
 		Screen.debugPrint(0,160,"Portugal Euro 2016!!!!", red, BOTTOM_SCREEN)
-		Screen.debugPrint(0,180,"Portugal Euro 2016!!!!", green, BOTTOM_SCREEN)
+		Screen.debugPrint(0,180,"Portugal Euro 2016!!!!", yellow, BOTTOM_SCREEN)
+		Screen.debugPrint(0,200,"Portugal Euro 2016!!!!", green, BOTTOM_SCREEN)
 		--Screen.debugPrint(0,120,Sound.getService(), white, BOTTOM_SCREEN) -- Displays used audio-service
 	else
 		Screen.debugPrint(0,20,"Internet connection failed.", red, BOTTOM_SCREEN)
