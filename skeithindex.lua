@@ -28,10 +28,12 @@ if (Network.isWifiEnabled()) and useupdate == 1 then
 	System.exit()
 end	
 --End
-
+if not System.doesFileExist("/skeith/firmware/native") then -- Stops people without Skeith from using the wrong updater.
+	error("Skeith CFW Missing.")
+end
 --Sound init for BGM :)
 if System.doesFileExist("/corbenik-updater/usebgm") or System.doesFileExist("/skeith-updater/usebgm") then
-	if not Sound.getService() == "csnd:SND" and System.doesFileExist("/3ds/dspfirm.cdc") then --csnd seems glitchy. I'll disable BGM for older releases of lpp.
+	if System.doesFileExist("/3ds/dspfirm.cdc") then --csnd seems glitchy. I'll disable BGM for older releases of lpp.
 		usebgm = 1
 	else
 		usebgm = 0
@@ -74,7 +76,7 @@ updatechecked = 0
 --App details
 versionmajor = 0
 versionminor = 5
-versionrev = 0
+versionrev = 1
 versionstring = versionmajor.."."..versionminor.."."..versionrev
 versionrelno = 1
 selfname = "skeithupdater"
@@ -102,6 +104,7 @@ servergetchainzippath = serverpath.."latest-skeith-nochain.txt" --This is wrong.
 white = Color.new(255,255,255)
 green = Color.new(0,240,32)
 red = Color.new(255,0,0)
+yellow = Color.new(255,255,0)
 
 
 -- Server/network functions
@@ -123,6 +126,15 @@ function servergetVars()
 end
 
 --System functions
+function fileCopy(input, output)
+	inputstream = io.open(input, FREAD)
+	inputstring = io.read(inputstream,0,io.size(inputstream))
+	outputstream = io.open(output, FCREATE)
+	io.write(outputstream, 0, inputstring, io.size(inputstream))
+	io.close(inputstream)
+	io.close(outputstream)
+	
+end
 function clear()
 
 	Screen.refresh()
@@ -270,6 +282,7 @@ function installnew()
 		if keepconfig == 1 then
 			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/config",cfwpath.."/config")
 			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/cache",cfwpath.."/cache")
+			fileCopy(cfwpath.."/config".."/main.conf",root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/config".."/main.conf")
 		end
 		if System.doesFileExist(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/bits/top.bin") then
 			System.renameFile(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/bits/top.bin", cfwpath.."/bits/top.bin")
@@ -317,8 +330,11 @@ function bottomscreen(no) -- if no = 1, the original, regular screen will show. 
 --		Screen.debugPrint(0,20,"Core Version: "..coreversionstring, white, BOTTOM_SCREEN)
 		Screen.debugPrint(0,40,"Author: gnmmarechal", white, BOTTOM_SCREEN)
 		Screen.debugPrint(0,60,"Special Thanks:", white, BOTTOM_SCREEN)
-		Screen.debugPrint(0,80,"Rinnegatamante (LPP-3DS)", white, BOTTOM_SCREEN)
+		Screen.debugPrint(0,80,"Rinnegatamante (LPP/Help)", white, BOTTOM_SCREEN)
 		Screen.debugPrint(0,100,"Crystal the Glaceon (Testing C-UP)", white, BOTTOM_SCREEN)
+		Screen.debugPrint(0,160,"Portugal Euro 2016!!!!", red, BOTTOM_SCREEN)
+		Screen.debugPrint(0,180,"Portugal Euro 2016!!!!", yellow, BOTTOM_SCREEN)
+		Screen.debugPrint(0,200,"Portugal Euro 2016!!!!", green, BOTTOM_SCREEN)
 	else
 		Screen.debugPrint(0,20,"Internet connection failed.", red, BOTTOM_SCREEN)
 	end
