@@ -4,7 +4,7 @@
 
 -- Run updated index.lua: If a file is available on the server, that file will be downloaded and used instead.
 -- Skipped if useupdate = 0
-isupdate = 0
+isupdate = 1
 
 
 if not System.doesFileExist("/skeith/firmware/native") and System.doesFileExist("/corbenik-updater/useskeith") then -- Stops people without Skeith from using the wrong updater.
@@ -180,6 +180,7 @@ localcurrenthash = root..appinstallname.."-updater/currenthash.sha512"
 serverhashurlstable = "latest-chain"
 serverhashurlstablenochain = "latest"
 serverhashurlnightly = "latest-nightly"
+nightlyhash = 0
 
 function sethashurl(mode)
 	if mode == 0 then --nochain
@@ -188,6 +189,7 @@ function sethashurl(mode)
 		serverhashurl = serverhashbaseurl..serverhashurlstable..serverhashext
 	elseif mode == 2 then
 		serverhashurl = serverhashbaseurl..serverhashurlnightly..serverhashext
+		nightlyhash = 1
 	end
 end
 
@@ -395,7 +397,9 @@ function precheck()
 			precheck() --Calls itself again after setting the payload path to arm9loaderhax_si.bin.
 		end
 	end
-	comparehash()
+	if nightlyhash == 0 then
+		comparehash()
+	end	
 	
 end
 
@@ -452,7 +456,9 @@ function installnew()
 			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/contrib",cfwpath.."/contrib")
 		end
 		System.deleteFile(downloadedzip)
-		updatehash()
+		if nightlyhash == 0 then
+			updatehash()
+		end
 	end
 	debugWrite(0,120,"DONE! Press A to reboot, B to quit!", green, TOP_SCREEN)
 	updated = 1
