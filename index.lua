@@ -169,6 +169,64 @@ yellow = Color.new(255,255,0)
 
 --Update-check functions
 
+--Variables
+serverhashbaseurl = "http://gs2012.xyz/3ds/corbenikupdater/"
+serverhashext = ".sha512"
+localhashdl = root..appinstallname.."-updater/newhash.sha512"
+localcurrenthash = root..appinstallname.."-updater/currenthash.sha512"
+
+
+--Hash URLs for the various versions
+serverhashurlstable = "latest-chain"
+serverhashurlstablenochain = "latest"
+serverhashurlnightly = "latest-nightly"
+
+function sethashurl(mode)
+	if mode == 0 then --nochain
+		serverhashurl = serverhashbaseurl..serverhashurlstablenochain..serverhashext
+	elseif mode == 1 then
+		serverhashurl = serverhashbaseurl..serverhashurlstable..serverhashext
+	elseif mode == 2 then
+		serverhashurl = serverhashbaseurl..serverhashurlnightly..serverhashext
+	end
+end
+
+function comparehash()
+	Network.downloadFile(serverhashurl,localhashdl)
+	if System.doesFileExist(localcurrenthash) then
+		localhashstream = io.open(localcurrenthash, FREAD)
+		localshahash = io.read(localhashstream,0,128)
+		io.close(localhashstream)
+	else
+		localhashstream = io.open(localcurrenthash, FCREATE)
+		io.write(localhashstream, 0, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 128)
+		System.deleteFile(localhashdl)
+		io.close(localhashstream)
+		comparehash()
+	end
+	serverhashstream = io.open(localhashdl, FREAD)
+	servershahash = io.read(serverhashstream, 0,128)
+	io.close(serverhashstream)
+	if servershahash == localshahash then
+		updated = 1
+		forcehashupdate = 0
+	else
+		updated = 0
+		forcehashupdate = 1
+	end
+end
+
+function updatehash()
+	if System.doesFileExist(localcurrenthash) then
+		System.deleteFile(localcurrenthash)
+	end
+	if System.doesFileExist(localhashdl) then
+		System.deleteFile(localhashdl)
+	end
+	Network.downloadFile(serverhashurl,localcurrenthash)
+end
+
+--Old stuff
 
 function checkupdate() --Checks for new version of Corbenik CFW -- Apparently broken
 	if updatechecked == 0 then
@@ -302,12 +360,15 @@ function precheck()
 	end	
 	if System.doesFileExist(usechainpayload) then
 		servergetzippath = servergetnochainzippath
+		sethashurl(0)
 	else
 		servergetzippath = servergetchainzippath
+		sethashurl(1)
 	end
 	if System.doesFileExist(nightlyfile) then
 		servergetzippath = servergetnightlyzippath
-		usenightly = 1	
+		usenightly = 1
+		sethashurl(2)
 	else
 		usenightly = 0
 	end
@@ -334,6 +395,7 @@ function precheck()
 			precheck() --Calls itself again after setting the payload path to arm9loaderhax_si.bin.
 		end
 	end
+	comparehash()
 	
 end
 
@@ -390,6 +452,7 @@ function installnew()
 			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/contrib",cfwpath.."/contrib")
 		end
 		System.deleteFile(downloadedzip)
+		updatehash()
 	end
 	debugWrite(0,120,"DONE! Press A to reboot, B to quit!", green, TOP_SCREEN)
 	updated = 1
