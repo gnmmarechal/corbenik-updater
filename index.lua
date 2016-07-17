@@ -129,6 +129,7 @@ scr = 1
 oldpad = Controls.read()
 debugmode = 1
 updatechecked = 0
+setnight = 0
 
 --App details
 versionmajor = 0
@@ -368,7 +369,6 @@ function precheck()
 		sethashurl(1)
 	end
 	if System.doesFileExist(nightlyfile) then
-		servergetzippath = servergetnightlyzippath
 		usenightly = 1
 		sethashurl(2)
 	else
@@ -530,6 +530,12 @@ end
 function installer() --scr == 2 / scr == 4
 	head()
 	debugWrite(0,40,"Started Installation...", white, TOP_SCREEN)
+	if setnight == 0 and scr == 5 and usenightly == 1 then
+		servergetzippath = servergetnightlyzippath
+		precheck()	
+		servergetVars() --This is a workaround, but it *should* do, I hope.
+		setnight = 1
+	end	
 	installnew()
 	checkquit()
 	checkreboot()
