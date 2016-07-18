@@ -265,6 +265,9 @@ function servergetVars()
 		serverzippath = Network.requestString(servergetzippath)
 		serverver = Network.requestString(servergetzipver)
 		serverrel = Network.requestString(servergetziprel)
+		if 	usenightly == 1 then
+			servernightlyzippath = Network.requestString(servergetnightlyzippath)
+		end
 	end
 end
 
@@ -369,6 +372,7 @@ function precheck()
 		sethashurl(1)
 	end
 	if System.doesFileExist(nightlyfile) then
+		servergetzippathnight = servergetnightlyzippath
 		usenightly = 1
 		sethashurl(2)
 	else
@@ -530,12 +534,6 @@ end
 function installer() --scr == 2 / scr == 4
 	head()
 	debugWrite(0,40,"Started Installation...", white, TOP_SCREEN)
-	if setnight == 0 and scr == 5 and usenightly == 1 then
-		servergetzippath = servergetnightlyzippath
-		precheck()	
-		servergetVars() --This is a workaround, but it *should* do, I hope.
-		setnight = 1
-	end	
 	installnew()
 	checkquit()
 	checkreboot()
@@ -576,6 +574,7 @@ while true do
 	pad = Controls.read()
 	bottomscreen(iswifion())
 	if scr == 5 and usenightly == 1 then
+		serverzippath = servernightlyzippath
 		isnightly = 1
 		keepconfig = 1
 		installer()
