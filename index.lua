@@ -273,13 +273,22 @@ end
 
 --System functions
 function fileCopy(input, output)
-	inputstream = io.open(input, FREAD)
-	inputstring = io.read(inputstream,0,io.size(inputstream))
-	outputstream = io.open(output, FCREATE)
-	io.write(outputstream, 0, inputstring, io.size(inputstream))
-	io.close(inputstream)
-	io.close(outputstream)
-	
+		inp = io.open(input,FREAD)
+	if System.doesFileExist(output) then
+		System.deleteFile(output)
+	end
+	out = io.open(output,FCREATE)
+	size = io.size(inp)
+	index = 0
+	while (index+(MAX_RAM_ALLOCATION/2) < size) do
+		io.write(out,index,io.read(inp,index,MAX_RAM_ALLOCATION/2),(MAX_RAM_ALLOCATION/2))
+		index = index + (MAX_RAM_ALLOCATION/2)
+	end
+	if index < size then
+		io.write(out,index,io.read(inp,index,size-index),(size-index))
+	end
+	io.close(inp)
+	io.close(out)
 end
 function clear()
 
