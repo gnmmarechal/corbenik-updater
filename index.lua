@@ -134,8 +134,8 @@ MAX_RAM_ALLOCATION = 10485760
 
 --App details
 versionmajor = 0
-versionminor = 5
-versionrev = 2
+versionminor = 6
+versionrev = 0
 versionstring = versionmajor.."."..versionminor.."."..versionrev
 versionrelno = 3
 selfname = "corbenikupdater"
@@ -143,7 +143,7 @@ selfpath = consolehbdir..selfname.."/"
 selfexepath = selfpath..selfname..".3dsx" -- This is for the 3DSX version only
 selfstring = "Corbenik CFW Updater v."..versionstring
 selfauthor = "gnmmarechal"
-
+newstructure = 0 -- By default 0 for the current stable doesn't use it, but the next nightly might use it.
 
 --Affected app details
 appname = "Corbenik CFW"
@@ -635,7 +635,11 @@ end
 function installer() --scr == 2 / scr == 4
 	head()
 	debugWrite(0,40,"Started Installation...", white, TOP_SCREEN)
-	installnew()
+	if newstructure == 1 then
+		installnewunixstructure()
+	else
+		installnew()
+	end
 	checkquit()
 	checkreboot()
 	checkrestart()
@@ -680,6 +684,7 @@ while true do
 		serverzippath = servernightlyzippath
 		isnightly = 1
 		keepconfig = 1
+		newstructure = 1 -- This will be used when a nighly supporting the new structure comes out. Till then, it won't work as it'll try to migrate data.
 		installer()
 	end	
 	if scr == 4 then

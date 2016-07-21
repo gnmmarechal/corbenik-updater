@@ -76,8 +76,8 @@ MAX_RAM_ALLOCATION = 10485760
 
 --App details
 versionmajor = 0
-versionminor = 5
-versionrev = 2
+versionminor = 6
+versionrev = 0
 versionstring = versionmajor.."."..versionminor.."."..versionrev
 versionrelno = 1
 selfname = "skeithupdater"
@@ -85,6 +85,7 @@ selfpath = consolehbdir..selfname.."/"
 selfexepath = selfpath..selfname..".3dsx" -- This is for the 3DSX version only
 selfstring = "Skeith CFW Updater v."..versionstring
 selfauthor = "gnmmarechal"
+newstructure = 1
 
 --Affected app details
 appname = "Skeith CFW"
@@ -472,7 +473,11 @@ end
 function installer() --scr == 2 / scr == 4
 	head()
 	debugWrite(0,40,"Started Installation...", white, TOP_SCREEN)
-	installnew()
+	if newstructure == 1 then
+		installnewunixstructure()
+	else
+		installnew()
+	end
 	checkquit()
 	checkreboot()
 	checkrestart()
