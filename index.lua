@@ -463,6 +463,32 @@ function migrate()
 		--Moving chain payloads
 			System.createDirectory(cfwpath.."/chain")
 			System.renameDirectory(cfwpath.."/chain", cfwpath.."/boot")
+	else -- Reverse migration function
+		if keepconfig == 1 then --Moving Config
+			if System.doesFileExist(cfwpath.."/etc/main.conf") then
+				System.renameDirectory(cfwpath.."/etc", cfwpath.."/config")
+			end
+		end	
+		--Moving firmwares
+		if (System.doesFileExist(cfwpath.."/lib/firmware/native")) or (System.doesFileExist(cfwpath.."/lib/firmware/agb")) or (System.doesFileExist(cfw.."/lib/firmware/twl")) then
+			System.renameDirectory(cfwpath.."/lib/firmware", cfwpath.."/firmware")
+		end
+		--Moving keys
+		if (System.doesFileExist(cfwpath.."/share/keys/native.key")) or (System.doesFileExist(cfwpath.."/share/keys/agb.key")) or (System.doesFileExist(cfwpath.."/share/keys/twl.key")) or (System.doesFileExist(cfwpath.."/share/keys/agb.cetk")) or (System.doesFileExist(cfwpath.."/share/keys/twl.cetk")) or (System.doesFileExist(cfwpath.."/share/keys/11key96.key")) then
+			System.renameDirectory(cfwpath.."/share/keys", cfwpath.."/keys")
+		end
+		--Moving splash screens
+		if (System.doesFileExist(cfwpath.."/libexec/top.bin")) then
+			System.createDirectory(cfwpath.."/bits")
+			System.renameFile(cfwpath.."/libexec/top.bin", cfwpath.."/bits/top.bin")
+		end
+		if (System.doesFileExist(cfwpath.."/libexec/bottom.bin")) then
+			System.createDirectory(cfwpath.."/bits")
+			System.renameFile(cfwpath.."/libexec/bottom.bin", cfwpath.."/bits/bottom.bin")
+		end
+		--Moving chain payloads
+			System.createDirectory(cfwpath.."/boot")
+			System.renameDirectory(cfwpath.."/boot", cfwpath.."/chain")
 	end
 end
 
