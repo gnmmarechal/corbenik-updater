@@ -7,10 +7,18 @@
 isupdate = 1
 
 
-if not System.doesFileExist("/skeith/firmware/native") and System.doesFileExist("/corbenik-updater/useskeith") then -- Stops people without Skeith from using the wrong updater.
+if (not System.doesFileExist("/skeith/firmware/native") and System.doesFileExist("/corbenik-updater/useskeith")) then -- Stops people without Skeith from using the wrong updater.
+	System.deleteFile("/corbenik-updater/useskeith")
+end
+if (not System.doesFileExist("/skeith/lib/firmware/native") and System.doesFileExist("/corbenik-updater/useskeith")) then -- Stops people without Skeith from using the wrong updater.
 	System.deleteFile("/corbenik-updater/useskeith")
 end
 if not System.doesFileExist("/corbenik/firmware/native") and System.doesFileExist("/skeith/firmware/native") then --If Corbenik isn't found but Skeith is, force Skeith updater.
+	skeithstream = io.open("/corbenik-updater/useskeith",FCREATE)
+	io.write(skeithstream,0,"SkeithCFW", 9)
+	io.close(skeithstream)
+end
+if not System.doesFileExist("/corbenik/lib/firmware/native") and System.doesFileExist("/skeith/lib/firmware/native") then --If Corbenik isn't found but Skeith is, force Skeith updater. (new structure)
 	skeithstream = io.open("/corbenik-updater/useskeith",FCREATE)
 	io.write(skeithstream,0,"SkeithCFW", 9)
 	io.close(skeithstream)
@@ -31,7 +39,7 @@ end
 if not Network.isWifiEnabled() then --Checks for Wi-Fi
 	error("Failed to connect to the network.")
 end
-if not System.doesFileExist("/corbenik/firmware/native") and not System.doesFileExist("/skeith/firmware/native") then -- Avoids people without Corbenik or Skeith on their SD Card from using the updater.
+if (not System.doesFileExist("/corbenik/firmware/native") and (not System.doesFileExist("/skeith/firmware/native"))) and (not System.doesFileExist("/corbenik/lib/firmware/native")) and (not System.doesFileExist("/skeith/lib/firmware/native")) then -- Avoids people without Corbenik or Skeith on their SD Card from using the updater.
 	error("Corbenik/Skeith CFW not found. Please install one or both.")
 end
 --Switches to Skeith script if setting is found.
@@ -389,7 +397,7 @@ function precheck()
 	else
 		usenightly = 0
 	end
-	if not System.doesFileExist(cfwpath.."/firmware/native") then
+	if (not System.doesFileExist(cfwpath.."/firmware/native")) or (not System.doesFileExist(cfwpath.."/lib/firmware/native")) then
 		usenightly = 0
 		if System.doesFileExist(usechainpayload) then
 			servergetzippath = servergetnochainzippath
@@ -603,9 +611,10 @@ function bottomscreen(no) -- if no = 1, the original, regular screen will show. 
 		Screen.debugPrint(0,60,"Special Thanks:", white, BOTTOM_SCREEN)
 		Screen.debugPrint(0,80,"Rinnegatamante (LPP-3DS/Help)", white, BOTTOM_SCREEN)
 		Screen.debugPrint(0,100,"Crystal the Glaceon (Testing)", white, BOTTOM_SCREEN)
-		Screen.debugPrint(0,160,"Portugal Euro 2016!!!!", red, BOTTOM_SCREEN)
-		Screen.debugPrint(0,180,"Portugal Euro 2016!!!!", yellow, BOTTOM_SCREEN)
-		Screen.debugPrint(0,200,"Portugal Euro 2016!!!!", green, BOTTOM_SCREEN)
+		Screen.debugPrint(0,120,"chaoskagami (Corbenik CFW)", white, BOTTOM_SCREEN)
+--		Screen.debugPrint(0,160,"Portugal Euro 2016!!!!", red, BOTTOM_SCREEN)
+--		Screen.debugPrint(0,180,"Portugal Euro 2016!!!!", yellow, BOTTOM_SCREEN)
+--		Screen.debugPrint(0,200,"Portugal Euro 2016!!!!", green, BOTTOM_SCREEN)
 		--Screen.debugPrint(0,120,Sound.getService(), white, BOTTOM_SCREEN) -- Displays used audio-service
 	else
 		Screen.debugPrint(0,20,"Internet connection failed.", red, BOTTOM_SCREEN)

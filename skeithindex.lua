@@ -28,7 +28,7 @@ if (Network.isWifiEnabled()) and useupdate == 1 then
 	System.exit()
 end	
 --End
-if not System.doesFileExist("/skeith/firmware/native") then -- Stops people without Skeith from using the wrong updater.
+if (not System.doesFileExist("/skeith/firmware/native")) and (not System.doesFileExist("/skeith/lib/firmware/native")) then -- Stops people without Skeith from using the wrong updater.
 	error("Skeith CFW Missing.")
 end
 --Sound init for BGM :)
@@ -246,7 +246,7 @@ function precheck()
 	else
 		servergetzippath = servergetchainzippath
 	end
-	if not System.doesFileExist(cfwpath.."/firmware/native") then
+	if (not System.doesFileExist(cfwpath.."/firmware/native")) and (not System.doesFileExist(cfwpath.."/lib/firmware/native")) then
 		usenightly = 0
 		error("File not found. Please properly install Skeith CFW.") --TO ADD: Copy required files from the Corbenik directory if it exists.
 		newinstall = 1
