@@ -460,6 +460,9 @@ function migrate()
 			System.createDirectory(cfwpath.."/libexec")
 			System.renameFile(cfwpath.."/bits/bottom.bin", cfwpath.."/libexec/bottom.bin")
 		end
+		--Moving cache
+		System.createDirectory(cfwpath.."/var")
+		System.renameDirectory(cfwpath.."/cache", cfwpath.."/var/cache")
 		--Moving chain payloads
 			System.createDirectory(cfwpath.."/chain")
 			System.renameDirectory(cfwpath.."/chain", cfwpath.."/boot")
@@ -486,6 +489,8 @@ function migrate()
 			System.createDirectory(cfwpath.."/bits")
 			System.renameFile(cfwpath.."/libexec/bottom.bin", cfwpath.."/bits/bottom.bin")
 		end
+		--Moving cache
+		System.renameDirectory(cfwpath.."/var", cfwpath.."/cache")
 		--Moving chain payloads
 			System.createDirectory(cfwpath.."/boot")
 			System.renameDirectory(cfwpath.."/boot", cfwpath.."/chain")
