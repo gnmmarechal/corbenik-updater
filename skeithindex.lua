@@ -314,7 +314,12 @@ function migrate()
 		--Moving chain payloads
 			System.createDirectory(cfwpath.."/chain")
 			System.renameDirectory(cfwpath.."/chain", cfwpath.."/boot")
-	else -- Reverse migration function?
+		--Moving locale
+			if System.doesFileExist(cfwpath.."/locale/info") then
+				System.createDirectory(cfwpath.."/share/locale")
+				System.renameDirectory(cfwpath.."/locale", cfwpath.."/share/locale/emu")
+			end
+	else -- Reverse migration function? NOW USELESS
 		if keepconfig == 1 then --Moving Config
 			if System.doesFileExist(cfwpath.."/etc/main.conf") then
 				System.renameDirectory(cfwpath.."/etc", cfwpath.."/config")
@@ -372,9 +377,12 @@ function installnewunixstructure()
 			System.renameFile("/arm9loaderhax_si".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax_si.bin")
 			System.renameFile("/arm9loaderhax".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax.bin")
 		end
+		System.deleteDirectory(cfwpath.."/lib/firmware")
 		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/lib/firmware",cfwpath.."/lib/firmware")
+		System.deleteDirectory(cfwpath.."/share/keys")
 		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/keys",cfwpath.."/share/keys")
 		if keepconfig == 1 then
+			System.deleteDirectory(cfwpath.."/etc")
 			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/etc",cfwpath.."/etc")
 			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/var/cache",cfwpath.."/var/cache")
 			System.createDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/etc")
@@ -387,9 +395,19 @@ function installnewunixstructure()
 			System.renameFile(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/bottom.bin", cfwpath.."/share/bottom.bin")
 		end
 		System.createDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/boot")
+		if System.doesFileExist(cfwpath.."/boot/Corbenik") then
+			System.renameFile(cfwpath.."/boot/Corbenik", cfwpath.."/Corbenik.bin")
+		end
+		System.deleteDirectory(cfwpath.."/boot")
 		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/boot",cfwpath.."/boot")
+		if System.doesFileExist(cfwpath.."/Corbenik.bin") then
+			System.renameFile(cfwpath.."/Corbenik.bin", cfwpath.."/boot/Corbenik")
+		end
+		System.deleteDirectory(cfwpath.."/share/locale/emu")
+		System.createDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/locale/emu")
+		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/locale/emu",cfwpath.."/share/locale/emu")
 		if isnightly == 1 then
-			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/locale/emu",cfwpath.."/share/locale/emu")
+			
 			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/bin",cfwpath.."/bin")
 		end
 		System.deleteFile(downloadedzip)
