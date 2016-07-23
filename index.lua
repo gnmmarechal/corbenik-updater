@@ -745,7 +745,7 @@ while true do
 
 	pad = Controls.read()
 	bottomscreen(iswifion())
-	if scr == 5 and usenightly == 1 then
+	if ((scr == 5 and usenightly == 1) and 1 == 0) then -- Can't compile any nightlies due to errors, so I'll disable this.
 		serverzippath = servernightlyzippath
 		isnightly = 1
 		keepconfig = 1

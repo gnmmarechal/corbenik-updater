@@ -338,19 +338,24 @@ function migrate()
 			System.renameDirectory(cfwpath.."/share/keys", cfwpath.."/keys")
 		end
 		--Moving splash screens
-		if (System.doesFileExist(cfwpath.."/libexec/top.bin")) then
+		if (System.doesFileExist(cfwpath.."/share/top.bin")) then
 			System.createDirectory(cfwpath.."/bits")
-			System.renameFile(cfwpath.."/libexec/top.bin", cfwpath.."/bits/top.bin")
+			System.renameFile(cfwpath.."/share/top.bin", cfwpath.."/share/top.bin")
 		end
-		if (System.doesFileExist(cfwpath.."/libexec/bottom.bin")) then
+		if (System.doesFileExist(cfwpath.."/share/bottom.bin")) then
 			System.createDirectory(cfwpath.."/bits")
-			System.renameFile(cfwpath.."/libexec/bottom.bin", cfwpath.."/bits/bottom.bin")
+			System.renameFile(cfwpath.."/share/bottom.bin", cfwpath.."/share/bottom.bin")
 		end
 		--Moving cache
 		System.renameDirectory(cfwpath.."/var/cache", cfwpath.."/cache")		
 		--Moving chain payloads
 			System.createDirectory(cfwpath.."/boot")
 			System.renameDirectory(cfwpath.."/boot", cfwpath.."/chain")
+		--Moving locale
+			if System.doesFileExist(cfwpath.."/share/locale/emu/info") then
+				System.createDirectory(cfwpath.."/share/locale")
+				System.renameDirectory(cfwpath.."/locale", cfwpath.."/share/locale/emu")
+			end			
 	end
 end
 
