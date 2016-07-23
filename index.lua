@@ -151,7 +151,7 @@ selfpath = consolehbdir..selfname.."/"
 selfexepath = selfpath..selfname..".3dsx" -- This is for the 3DSX version only
 selfstring = "Corbenik CFW Updater v."..versionstring
 selfauthor = "gnmmarechal"
-newstructure = 0 -- By default 0 for the current stable doesn't use it, but the next nightly might use it.
+newstructure = 1 -- By default 0 for the current stable doesn't use it, but the next nightly might use it.
 
 --Affected app details
 appname = "Corbenik CFW"
@@ -729,7 +729,7 @@ while true do
 		serverzippath = servernightlyzippath
 		isnightly = 1
 		keepconfig = 1
-		newstructure = 1 -- This will be used when a nighly supporting the new structure comes out. Till then, it won't work as it'll try to migrate data.
+		--newstructure = 1 -- This will be used when a nighly supporting the new structure comes out. Till then, it won't work as it'll try to migrate data.
 		installer()
 	end	
 	if scr == 4 then
