@@ -256,6 +256,10 @@ function precheck()
 	if System.doesFileExist(config) then
 		configstream = io.open(config,FREAD)
 		armpayloadpath = io.read(configstream,0,io.size(configstream))
+		if (not System.doesFileExist(armpayloadpath)) then
+			System.deleteFile(config)
+			precheck()
+		end		
 	else
 		armpayloadpath = root.."arm9loaderhax.bin"
 		if System.doesFileExist("/arm9loaderhax_si.bin") then
