@@ -338,7 +338,7 @@ function migrate()
 			System.renameFile(cfwpath.."/libexec/bottom.bin", cfwpath.."/bits/bottom.bin")
 		end
 		--Moving cache
-		System.renameDirectory(cfwpath.."/var", cfwpath.."/cache")		
+		System.renameDirectory(cfwpath.."/var/cache", cfwpath.."/cache")		
 		--Moving chain payloads
 			System.createDirectory(cfwpath.."/boot")
 			System.renameDirectory(cfwpath.."/boot", cfwpath.."/chain")
