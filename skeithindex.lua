@@ -285,7 +285,7 @@ function migrate()
 			end
 		end	
 		--Moving firmwares
-		if (System.doesFileExist(cfwpath.."/firmware/native")) or (System.doesFileExist(cfwpath.."/firmware/agb")) or (System.doesFileExist(cfw.."/firmware/twl")) then
+		if (System.doesFileExist(cfwpath.."/firmware/native")) or (System.doesFileExist(cfwpath.."/firmware/agb")) or (System.doesFileExist(cfwpath.."/firmware/twl")) then
 			System.createDirectory(cfwpath.."/lib")
 			System.renameDirectory(cfwpath.."/firmware", cfwpath.."/lib/firmware")
 		end
@@ -378,13 +378,13 @@ function installnewunixstructure()
 			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/etc",cfwpath.."/etc")
 			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/var/cache",cfwpath.."/var/cache")
 			System.createDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/etc")
-			fileCopy(cfwpath.."/etc".."/main.conf",root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/etc".."/main.conf")
+			--fileCopy(cfwpath.."/etc".."/main.conf",root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/etc".."/main.conf")
 		end
-		if System.doesFileExist(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/libexec/top.bin") then
-			System.renameFile(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/libexec/top.bin", cfwpath.."/libexec/top.bin")
+		if System.doesFileExist(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/top.bin") then
+			System.renameFile(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/top.bin", cfwpath.."/share/top.bin")
 		end
-		if System.doesFileExist(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/libexec/bottom.bin") then
-			System.renameFile(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/libexec/bottom.bin", cfwpath.."/libexec/bottom.bin")
+		if System.doesFileExist(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/bottom.bin") then
+			System.renameFile(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/bottom.bin", cfwpath.."/share/bottom.bin")
 		end
 		System.createDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/boot")
 		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/boot",cfwpath.."/boot")
