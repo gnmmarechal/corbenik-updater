@@ -7,12 +7,10 @@
 isupdate = 1
 
 
-if (not System.doesFileExist("/skeith/firmware/native") and System.doesFileExist("/corbenik-updater/useskeith")) then -- Stops people without Skeith from using the wrong updater.
+if ((not System.doesFileExist("/skeith/firmware/native") and System.doesFileExist("/corbenik-updater/useskeith")) and (not System.doesFileExist("/skeith/lib/firmware/native") and System.doesFileExist("/corbenik-updater/useskeith"))) then -- Stops people without Skeith from using the wrong updater.
 	System.deleteFile("/corbenik-updater/useskeith")
 end
-if (not System.doesFileExist("/skeith/lib/firmware/native") and System.doesFileExist("/corbenik-updater/useskeith")) then -- Stops people without Skeith from using the wrong updater.
-	System.deleteFile("/corbenik-updater/useskeith")
-end
+
 if not System.doesFileExist("/corbenik/firmware/native") and System.doesFileExist("/skeith/firmware/native") then --If Corbenik isn't found but Skeith is, force Skeith updater.
 	skeithstream = io.open("/corbenik-updater/useskeith",FCREATE)
 	io.write(skeithstream,0,"SkeithCFW", 9)
