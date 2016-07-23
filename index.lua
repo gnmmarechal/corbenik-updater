@@ -453,12 +453,17 @@ function migrate()
 		end
 		--Moving splash screens
 		if (System.doesFileExist(cfwpath.."/bits/top.bin")) then
-			System.createDirectory(cfwpath.."/libexec")
-			System.renameFile(cfwpath.."/bits/top.bin", cfwpath.."/libexec/top.bin")
+			System.createDirectory(cfwpath.."/share")
+			System.renameFile(cfwpath.."/bits/top.bin", cfwpath.."/share/top.bin")
 		end
 		if (System.doesFileExist(cfwpath.."/bits/bottom.bin")) then
-			System.createDirectory(cfwpath.."/libexec")
-			System.renameFile(cfwpath.."/bits/bottom.bin", cfwpath.."/libexec/bottom.bin")
+			System.createDirectory(cfwpath.."/share")
+			System.renameFile(cfwpath.."/bits/bottom.bin", cfwpath.."/share/bottom.bin")
+		end
+		--Moving termfont.bin
+		if (System.doesFileExist(cfwpath.."/bits/termfont.bin")) then
+			System.createDirectory(cfwpath.."/share")
+			System.renameFile(cfwpath.."/bits/termfont.bin", cfwpath.."/share/termfont.bin")		
 		end
 		--Moving cache
 		System.createDirectory(cfwpath.."/var")
