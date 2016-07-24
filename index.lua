@@ -4,7 +4,7 @@
 
 -- Run updated index.lua: If a file is available on the server, that file will be downloaded and used instead.
 -- Skipped if useupdate = 0
-isupdate = 1
+isupdate = 0
 
 
 if ((not System.doesFileExist("/skeith/firmware/native") and System.doesFileExist("/corbenik-updater/useskeith")) and (not System.doesFileExist("/skeith/lib/firmware/native") and System.doesFileExist("/corbenik-updater/useskeith"))) then -- Stops people without Skeith from using the wrong updater.
@@ -750,11 +750,11 @@ while true do
 
 	pad = Controls.read()
 	bottomscreen(iswifion())
-	if ((scr == 5 and usenightly == 1) and 1 == 0) then -- Can't compile any nightlies due to errors, so I'll disable this.
+	if scr == 5 and usenightly == 1 then
 		serverzippath = servernightlyzippath
 		isnightly = 1
 		keepconfig = 1
-		--newstructure = 1 -- This will be used when a nighly supporting the new structure comes out. Till then, it won't work as it'll try to migrate data.
+		--newstructure = 1 -- This will be used when a nighly supporting the new structure comes out. Till then, it won't work as it'll try to migrate data. --Now default for ALL Corbenik releases
 		installer()
 	end	
 	if scr == 4 then
