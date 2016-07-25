@@ -364,6 +364,26 @@ function migrate()
 	end
 end
 
+--Cleaner function
+
+function postcleanup()
+	if System.doesFileExist(downloadedzip) then
+		System.deleteFile(downloadedzip)
+	end
+	if System.doesFileExist("/LICENSE.txt") then
+		System.deleteFile("/LICENSE.txt")
+	end
+	if System.doesFileExist("/o3ds_firm.sh") then
+		System.deleteFile("/o3ds_firm.sh")
+	end
+	if System.doesFileExist("/n3ds_firm.sh") then
+		System.deleteFile("/n3ds_firm.sh")
+	end
+	if System.doesFileExist("/README.md") then
+		System.deleteFile("/README.md")
+	end
+end
+
 function installnewunixstructure()
 	headflip = 1
 	migrationon = 1
@@ -424,7 +444,7 @@ function installnewunixstructure()
 			
 			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/bin",cfwpath.."/bin")
 		end
-		System.deleteFile(downloadedzip)
+		postcleanup()
 		if nightlyhash == 0 then
 			updatehash()
 		end
