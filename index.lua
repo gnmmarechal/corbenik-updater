@@ -54,7 +54,12 @@ if System.doesFileExist("/corbenik-updater/useupdate") then
 		useupdate = 0
 	end
 else
-	useupdate = 0
+	--useupdate = 0
+	if isupdate == 0 then
+		useupdate = 1
+	else
+		useupdate = 0
+	end	
 end
 if (Network.isWifiEnabled()) and useupdate == 1 then
 	if System.doesFileExist("/corbenik-updater/updatedindex.lua") then
