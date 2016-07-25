@@ -24,14 +24,7 @@ updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
 skeithupdateserverlua = "http://gs2012.xyz/3ds/skeithupdater/updatedindex.lua"
 System.createDirectory("/corbenik-updater")
 System.createDirectory("/skeith-updater")
---[[
-if System.doesFileExist("/skeith-updater/updatedindex.lua") then
-	System.deleteFile("/skeith-updater/updatedindex.lua")
-end
-if System.doesFileExist("/corbenik-updater/updatedindex.lua") then
-	System.deleteFile("/corbenik-updater/updatedindex.lua")
-end
---]]
+
 if not Network.isWifiEnabled() then --Checks for Wi-Fi
 	error("Failed to connect to the network.")
 end
@@ -54,26 +47,6 @@ else
 
 end
 
---[[
-if System.doesFileExist("romfs:/skeithindex.lua") and skeithusage == 1 then
-elseif not System.doesFileExist("romfs:/skeithindex.lua") and skeithusage == 1 then
-	if System.doesFileExist("/skeith-updater/updatedindex.lua") then
-		System.deleteFile("/skeith-updater/updatedindex.lua")
-	end
-	Network.downloadFile(skeithupdateserverlua, "/skeith-updater/updatedindex.lua")
-	dofile("/skeith-updater/updatedindex.lua")
-	System.exit()	
-end
---]]
---[[
--- Update script
-if isupdate == 0 then
-	coremajor = 0
-	coreminor = 3
-	corerev = 0
-	coreversionstring = coremajor.."."..coreminor.."."..corerev
-end
---]]
 if System.doesFileExist("/corbenik-updater/useupdate") then
 	if isupdate == 0 then
 		useupdate = 1
@@ -513,76 +486,7 @@ function migrate()
 	end
 end
 
---[[
-function installnewunixstructure()
-	headflip = 1
-	migrationon = 1
-	head()
-	debugWrite(0,60,"Downloading ZIP...", white, TOP_SCREEN)
-	if updated == 0 then
-		Network.downloadFile(serverzippath, downloadedzip)
-	end
-	debugWrite(0,80,"Backing up old files...", red, TOP_SCREEN)
-	if updated == 0 then
-		migrate()
-		h,m,s = System.getTime()
-		day_value,day,month,year = System.getDate()
-		System.renameDirectory(cfwpath,root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year)
-		System.renameFile(armpayloadpath,armpayloadpath.."-BACKUP-"..h..m..s..day_value..day..month..year)
-	end
-	debugWrite(0,100,"Extracting to path...", white, TOP_SCREEN)
-	if updated == 0 then
-		System.renameFile("/arm9loaderhax.bin", "/arm9loaderhax".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin")
-		System.renameFile("/arm9loaderhax_si.bin", "/arm9loaderhax_si".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin")
-		System.extractZIP(downloadedzip,appinstallpath)
-		System.deleteFile("/arm9loaderhax.bin")
-		System.extractFromZIP(downloadedzip,"arm9loaderhax.bin",armpayloadpath)
-		if not System.doesFileExist("/arm9loaderhax.bin") and not System.doesFileExist("/arm9loaderhax_si.bin") then
-			System.renameFile("/arm9loaderhax_si".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax_si.bin")
-			System.renameFile("/arm9loaderhax".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax.bin")
-		end
-		System.deleteDirectory(cfwpath.."/lib/firmware")
-		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/lib/firmware",cfwpath.."/lib/firmware")
-		System.deleteDirectory(cfwpath.."/share/keys")		
-		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/keys",cfwpath.."/share/keys")
-		if keepconfig == 1 then
-			System.deleteDirectory(cfwpath.."/etc")		
-			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/etc",cfwpath.."/etc")
-			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/var/cache",cfwpath.."/var/cache")
-			System.createDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/etc")
-			fileCopy(cfwpath.."/etc".."/main.conf",root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/etc".."/main.conf")
-		end
-		if System.doesFileExist(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/libexec/top.bin") then
-			System.renameFile(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/libexec/top.bin", cfwpath.."/libexec/top.bin")
-		end
-		if System.doesFileExist(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/libexec/bottom.bin") then
-			System.renameFile(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/libexec/bottom.bin", cfwpath.."/libexec/bottom.bin")
-		end
-		System.createDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/boot")
-		if System.doesFileExist(cfwpath.."/boot/Corbenik") then
-			System.renameFile(cfwpath.."/boot/Corbenik", cfwpath.."/Corbenik.bin")
-		end
-		System.deleteDirectory(cfwpath.."/boot")
-		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/boot",cfwpath.."/boot")
-		if System.doesFileExist(cfwpath.."/Corbenik.bin") then
-			System.renameFile(cfwpath.."/Corbenik.bin", cfwpath.."/boot/Corbenik")
-		end
-		System.deleteDirectory(cfwpath.."/share/locale/emu")		
-		System.createDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/locale/emu")
-		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/locale/emu",cfwpath.."/share/locale/emu")
-		if isnightly == 1 then
-			
-			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/bin",cfwpath.."/bin")
-		end
-		System.deleteFile(downloadedzip)
-		if nightlyhash == 0 then
-			updatehash()
-		end
-	end
-	debugWrite(0,120,"DONE! Press A to reboot, B to quit!", green, TOP_SCREEN)
-	updated = 1
-end
---]]
+
 function installnewunixstructure()
 	headflip = 1
 	migrationon = 1
@@ -652,60 +556,6 @@ function installnewunixstructure()
 	updated = 1
 end
 
-function installnew()
-	headflip = 1
-	head()
-	debugWrite(0,60,"Downloading ZIP...", white, TOP_SCREEN)
-	if updated == 0 then
-		Network.downloadFile(serverzippath, downloadedzip)
-	end
-	debugWrite(0,80,"Backing up old files...", red, TOP_SCREEN)
-	if updated == 0 then
-		migrate()
-		h,m,s = System.getTime()
-		day_value,day,month,year = System.getDate()
-		System.renameDirectory(cfwpath,root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year)
-		System.renameFile(armpayloadpath,armpayloadpath.."-BACKUP-"..h..m..s..day_value..day..month..year)
-	end
-	debugWrite(0,100,"Extracting to path...", white, TOP_SCREEN)
-	if updated == 0 then
-		System.renameFile("/arm9loaderhax.bin", "/arm9loaderhax".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin")
-		System.renameFile("/arm9loaderhax_si.bin", "/arm9loaderhax_si".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin")
-		System.extractZIP(downloadedzip,appinstallpath)
-		System.deleteFile("/arm9loaderhax.bin")
-		System.extractFromZIP(downloadedzip,"arm9loaderhax.bin",armpayloadpath)
-		if not System.doesFileExist("/arm9loaderhax.bin") and not System.doesFileExist("/arm9loaderhax_si.bin") then
-			System.renameFile("/arm9loaderhax_si".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax_si.bin")
-			System.renameFile("/arm9loaderhax".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax.bin")
-		end
-		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/firmware",cfwpath.."/firmware")
-		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/keys",cfwpath.."/keys")
-		if keepconfig == 1 then
-			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/config",cfwpath.."/config")
-			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/cache",cfwpath.."/cache")
-			System.createDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/config")
-			fileCopy(cfwpath.."/config".."/main.conf",root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/config".."/main.conf")
-		end
-		if System.doesFileExist(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/bits/top.bin") then
-			System.renameFile(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/bits/top.bin", cfwpath.."/bits/top.bin")
-		end
-		if System.doesFileExist(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/bits/bottom.bin") then
-			System.renameFile(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/bits/bottom.bin", cfwpath.."/bits/bottom.bin")
-		end
-		System.createDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/chain")
-		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/chain",cfwpath.."/chain")
-		if isnightly == 1 then
-			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/locale",cfwpath.."/locale")
-			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/contrib",cfwpath.."/contrib")
-		end
-		System.deleteFile(downloadedzip)
-		if nightlyhash == 0 then
-			--updatehash()
-		end
-	end
-	debugWrite(0,120,"DONE! Press A to reboot, B to quit!", green, TOP_SCREEN)
-	updated = 1
-end
 
 --UI Screens
 
@@ -774,11 +624,7 @@ end
 function installer() --scr == 2 / scr == 4
 	head()
 	debugWrite(0,40,"Started Installation...", white, TOP_SCREEN)
-	if newstructure == 1 then
-		installnewunixstructure()
-	else
-		installnew()
-	end
+	installnewunixstructure()
 	checkquit()
 	checkreboot()
 	checkrestart()
@@ -823,7 +669,6 @@ while true do
 		serverzippath = servernightlyzippath
 		isnightly = 1
 		keepconfig = 1
-		--newstructure = 1 -- This will be used when a nighly supporting the new structure comes out. Till then, it won't work as it'll try to migrate data. --Now default for ALL Corbenik releases
 		installer()
 	end	
 	if scr == 4 then
