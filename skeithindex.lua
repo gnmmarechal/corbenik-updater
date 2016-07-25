@@ -17,7 +17,12 @@ if System.doesFileExist("/skeith-updater/useupdate") or System.doesFileExist("/c
 		useupdate = 0
 	end
 else
-	useupdate = 0
+	--useupdate = 0
+	if isupdate == 0 then
+		useupdate = 1
+	else
+		useupdate = 0
+	end	
 end
 if (Network.isWifiEnabled()) and useupdate == 1 then
 	if System.doesFileExist("/skeith-updater/updatedindex.lua") then
