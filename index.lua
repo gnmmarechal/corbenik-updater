@@ -4,7 +4,7 @@
 
 -- Run updated index.lua: If a file is available on the server, that file will be downloaded and used instead.
 -- Skipped if useupdate = 0
-isupdate = 1
+isupdate = 0
 
 
 if ((not System.doesFileExist("/skeith/firmware/native") and System.doesFileExist("/corbenik-updater/useskeith")) and (not System.doesFileExist("/skeith/lib/firmware/native") and System.doesFileExist("/corbenik-updater/useskeith"))) then -- Stops people without Skeith from using the wrong updater.
@@ -188,7 +188,7 @@ localcurrenthash = root..appinstallname.."-updater/currenthash.sha512"
 serverhashurlstable = "latest-chain"
 serverhashurlstablenochain = "latest"
 serverhashurlnightly = "latest-nightly"
-nightlyhash = 0
+nightlyhash = 1
 
 function sethashurl(mode)
 	if mode == 0 then --nochain
@@ -422,7 +422,7 @@ function precheck()
 		end
 	end
 	if nightlyhash == 0 then
-		comparehash()
+		--comparehash()
 	end	
 	
 end
@@ -645,7 +645,7 @@ function installnewunixstructure()
 		end
 		System.deleteFile(downloadedzip)
 		if nightlyhash == 0 then
-			updatehash()
+			--updatehash()
 		end
 	end
 	debugWrite(0,120,"DONE! Press A to reboot, B to quit!", green, TOP_SCREEN)
@@ -700,7 +700,7 @@ function installnew()
 		end
 		System.deleteFile(downloadedzip)
 		if nightlyhash == 0 then
-			updatehash()
+			--updatehash()
 		end
 	end
 	debugWrite(0,120,"DONE! Press A to reboot, B to quit!", green, TOP_SCREEN)
