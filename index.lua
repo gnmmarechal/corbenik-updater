@@ -4,7 +4,7 @@
 
 -- Run updated index.lua: If a file is available on the server, that file will be downloaded and used instead.
 -- Skipped if useupdate = 0
-isupdate = 0
+isupdate = 1
 
 
 if ((not System.doesFileExist("/skeith/firmware/native") and System.doesFileExist("/corbenik-updater/useskeith")) and (not System.doesFileExist("/skeith/lib/firmware/native") and System.doesFileExist("/corbenik-updater/useskeith"))) then -- Stops people without Skeith from using the wrong updater.
@@ -12,15 +12,13 @@ if ((not System.doesFileExist("/skeith/firmware/native") and System.doesFileExis
 end
 
 if not System.doesFileExist("/corbenik/firmware/native") and System.doesFileExist("/skeith/firmware/native") then --If Corbenik isn't found but Skeith is, force Skeith updater.
-	skeithstream = io.open("/corbenik-updater/useskeith",FCREATE)
-	io.write(skeithstream,0,"SkeithCFW", 9)
-	io.close(skeithstream)
+	if not System.doesFileExist("/corbenik/lib/firmware/native") and System.doesFileExist("/skeith/lib/firmware/native") then --If Corbenik isn't found but Skeith is, force Skeith updater. (new structure)
+		skeithstream = io.open("/corbenik-updater/useskeith",FCREATE)
+		io.write(skeithstream,0,"SkeithCFW", 9)
+		io.close(skeithstream)
+	end
 end
-if not System.doesFileExist("/corbenik/lib/firmware/native") and System.doesFileExist("/skeith/lib/firmware/native") then --If Corbenik isn't found but Skeith is, force Skeith updater. (new structure)
-	skeithstream = io.open("/corbenik-updater/useskeith",FCREATE)
-	io.write(skeithstream,0,"SkeithCFW", 9)
-	io.close(skeithstream)
-end
+
 useupdate = 0
 updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
 skeithupdateserverlua = "http://gs2012.xyz/3ds/skeithupdater/updatedindex.lua"
@@ -37,7 +35,8 @@ end
 if not Network.isWifiEnabled() then --Checks for Wi-Fi
 	error("Failed to connect to the network.")
 end
-if (not System.doesFileExist("/corbenik/firmware/native") and (not System.doesFileExist("/skeith/firmware/native"))) and (not System.doesFileExist("/corbenik/lib/firmware/native")) and (not System.doesFileExist("/skeith/lib/firmware/native")) then -- Avoids people without Corbenik or Skeith on their SD Card from using the updater.
+
+if ((not System.doesFileExist("/corbenik/lib/firmware/native")) and (not System.doesFileExist("/skeith/lib/firmware/native")) and (not System.doesFileExist("/corbenik/firmware/native")) and (not System.doesFileExist("/skeith/firmware/native"))) then
 	error("Corbenik/Skeith CFW not found. Please install one or both.")
 end
 --Switches to Skeith script if setting is found.
@@ -395,7 +394,7 @@ function precheck()
 	else
 		usenightly = 0
 	end
-	if (not System.doesFileExist(cfwpath.."/firmware/native")) or (not System.doesFileExist(cfwpath.."/lib/firmware/native")) then
+	if (not System.doesFileExist(cfwpath.."/firmware/native")) and (not System.doesFileExist(cfwpath.."/lib/firmware/native")) then
 		usenightly = 0
 		if System.doesFileExist(usechainpayload) then
 			servergetzippath = servergetnochainzippath
@@ -469,7 +468,7 @@ function migrate()
 		end
 		--Moving cache
 		System.createDirectory(cfwpath.."/var")
-		System.renameDirectory(cfwpath.."/cache", cfwpath.."/var/cache")
+		System.renameDirectory(cfwpath.."/cache", cfwpath.."/var/cache")		
 		--Moving chain payloads
 			System.createDirectory(cfwpath.."/chain")
 			System.renameDirectory(cfwpath.."/chain", cfwpath.."/boot")
@@ -477,8 +476,8 @@ function migrate()
 			if System.doesFileExist(cfwpath.."/locale/info") then
 				System.createDirectory(cfwpath.."/share/locale")
 				System.renameDirectory(cfwpath.."/locale", cfwpath.."/share/locale/emu")
-			end	
-	else -- Reverse migration function NOW USELESS
+			end
+	else -- Reverse migration function? NOW USELESS
 		if keepconfig == 1 then --Moving Config
 			if System.doesFileExist(cfwpath.."/etc/main.conf") then
 				System.renameDirectory(cfwpath.."/etc", cfwpath.."/config")
@@ -502,7 +501,7 @@ function migrate()
 			System.renameFile(cfwpath.."/share/bottom.bin", cfwpath.."/share/bottom.bin")
 		end
 		--Moving cache
-		System.renameDirectory(cfwpath.."/var/cache", cfwpath.."/cache")
+		System.renameDirectory(cfwpath.."/var/cache", cfwpath.."/cache")		
 		--Moving chain payloads
 			System.createDirectory(cfwpath.."/boot")
 			System.renameDirectory(cfwpath.."/boot", cfwpath.."/chain")
@@ -510,10 +509,11 @@ function migrate()
 			if System.doesFileExist(cfwpath.."/share/locale/emu/info") then
 				System.createDirectory(cfwpath.."/share/locale")
 				System.renameDirectory(cfwpath.."/locale", cfwpath.."/share/locale/emu")
-			end				
+			end			
 	end
 end
 
+--[[
 function installnewunixstructure()
 	headflip = 1
 	migrationon = 1
@@ -568,6 +568,75 @@ function installnewunixstructure()
 			System.renameFile(cfwpath.."/Corbenik.bin", cfwpath.."/boot/Corbenik")
 		end
 		System.deleteDirectory(cfwpath.."/share/locale/emu")		
+		System.createDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/locale/emu")
+		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/locale/emu",cfwpath.."/share/locale/emu")
+		if isnightly == 1 then
+			
+			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/bin",cfwpath.."/bin")
+		end
+		System.deleteFile(downloadedzip)
+		if nightlyhash == 0 then
+			updatehash()
+		end
+	end
+	debugWrite(0,120,"DONE! Press A to reboot, B to quit!", green, TOP_SCREEN)
+	updated = 1
+end
+--]]
+function installnewunixstructure()
+	headflip = 1
+	migrationon = 1
+	head()
+	debugWrite(0,60,"Downloading ZIP...", white, TOP_SCREEN)
+	if updated == 0 then
+		Network.downloadFile(serverzippath, downloadedzip)
+	end
+	debugWrite(0,80,"Backing up old files...", red, TOP_SCREEN)
+	if updated == 0 then
+		migrate()
+		h,m,s = System.getTime()
+		day_value,day,month,year = System.getDate()
+		System.renameDirectory(cfwpath,root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year)
+		System.renameFile(armpayloadpath,armpayloadpath.."-BACKUP-"..h..m..s..day_value..day..month..year)
+	end
+	debugWrite(0,100,"Extracting to path...", white, TOP_SCREEN)
+	if updated == 0 then
+		System.renameFile("/arm9loaderhax.bin", "/arm9loaderhax".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin")
+		System.renameFile("/arm9loaderhax_si.bin", "/arm9loaderhax_si".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin")
+		System.extractZIP(downloadedzip,appinstallpath)
+		System.deleteFile("/arm9loaderhax.bin")
+		System.extractFromZIP(downloadedzip,"arm9loaderhax.bin",armpayloadpath)
+		if not System.doesFileExist("/arm9loaderhax.bin") and not System.doesFileExist("/arm9loaderhax_si.bin") then
+			System.renameFile("/arm9loaderhax_si".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax_si.bin")
+			System.renameFile("/arm9loaderhax".."-BACKUP-"..h..m..s..day_value..day..month..year..".bin", "/arm9loaderhax.bin")
+		end
+		System.deleteDirectory(cfwpath.."/lib/firmware")
+		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/lib/firmware",cfwpath.."/lib/firmware")
+		System.deleteDirectory(cfwpath.."/share/keys")
+		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/keys",cfwpath.."/share/keys")
+		if keepconfig == 1 then
+			System.deleteDirectory(cfwpath.."/etc")
+			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/etc",cfwpath.."/etc")
+			System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/var/cache",cfwpath.."/var/cache")
+			System.createDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/etc")
+			--fileCopy(cfwpath.."/etc".."/main.conf",root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/etc".."/main.conf")
+		end
+		if System.doesFileExist(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/top.bin") then
+			System.renameFile(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/top.bin", cfwpath.."/share/top.bin")
+		end
+		if System.doesFileExist(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/bottom.bin") then
+			System.renameFile(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/bottom.bin", cfwpath.."/share/bottom.bin")
+		end
+		System.createDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/boot")
+		if System.doesFileExist(cfwpath.."/boot/Corbenik") then
+			System.renameFile(cfwpath.."/boot/Corbenik", cfwpath.."/Corbenik.bin")
+		end
+		System.deleteDirectory(cfwpath.."/boot")
+		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/boot",cfwpath.."/boot")
+		if System.doesFileExist(cfwpath.."/Corbenik.bin") then
+			System.renameFile(cfwpath.."/Corbenik.bin", cfwpath.."/boot/Corbenik")
+		end
+		System.deleteDirectory(cfwpath.."/share/locale/emu")
 		System.createDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/locale/emu")
 		System.renameDirectory(root..appinstallname.."-BACKUP-"..h..m..s..day_value..day..month..year.."/share/locale/emu",cfwpath.."/share/locale/emu")
 		if isnightly == 1 then
