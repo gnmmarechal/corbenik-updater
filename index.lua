@@ -130,6 +130,7 @@ newstructure = 1 -- By default 0 for the current stable doesn't use it, but the 
 
 --Affected app details
 appname = "Corbenik CFW"
+originalbuild = "Corbenik"
 appinstallname = "corbenik"
 appinstallpath = root
 downloadedzip = root..appinstallname..".zip"
@@ -489,6 +490,17 @@ function migrate()
 				System.renameDirectory(cfwpath.."/locale", cfwpath.."/share/locale/emu")
 			end			
 	end
+end
+
+function migrate_changebuild() --Part of the Skeith/Corbenik Updater merge
+	-- Alpha test. Should rename the /corbenik directory to /skeith and restart to Skeith Updater.
+	skeithstream = io.open("/corbenik-updater/useskeith",FCREATE)
+	io.write(skeithstream,0,"SkeithCFW", 9)
+	io.close(skeithstream)
+	skeithcheckstream = io.open("/corbenik-updater/skeith.reboot",FCREATE)
+	io.write(skeithcheckstream,0,"SkeithCFW", 9)
+	io.close(skeithcheckstream)
+	error("Press A to proceed.") --Restarts into Skeith Updater.
 end
 
 --Cleaner function
