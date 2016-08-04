@@ -91,7 +91,11 @@ selfexepath = selfpath..selfname..".3dsx" -- This is for the 3DSX version only
 selfstring = "Skeith CFW Updater v."..versionstring
 selfauthor = "gnmmarechal"
 newstructure = 1
-
+if System.doesFileExist("/corbenik-updater/skeith.reboot") then
+	forceskeithusage = 1
+else
+	forceskeithusage = 0
+end
 --Affected app details
 appname = "Skeith CFW"
 appinstallname = "skeith"
@@ -364,6 +368,16 @@ function migrate()
 	end
 end
 
+function disableforcedskeith()
+	if System.doesFileExist("/corbenik-updater/useskeith") then
+		System.deleteFile("/corbenik-updater/useskeith")
+	end
+	if System.doesFileExist("/corbenik-updater/skeith.reboot") then
+		System.deleteFile("/corbenik-updater/skeith.reboot")
+		System.renameDirectory("/skeith", "/corbenik")
+	end
+	error("Press A to proceed.")
+end
 --Cleaner function
 
 function postcleanup()
@@ -549,6 +563,7 @@ function firstscreen() -- scr == 1
 	Screen.debugPrint(0,100,"Please select an option:", white, TOP_SCREEN)
 	Screen.debugPrint(0,120,"A) Clean Update (Recommended)", white, TOP_SCREEN)
 	Screen.debugPrint(0,140,"X) Dirty Update (Keep Config)", white, TOP_SCREEN)
+	Screen.debugPrint(0,160,"Y) Switch to Stable Updater", white, TOP_SCREEN)
 	Screen.debugPrint(0,180,"B) Quit", white, TOP_SCREEN)
 	inputscr(2, KEY_A)
 	inputscr(4, KEY_X)
@@ -605,10 +620,11 @@ while true do
 
 	pad = Controls.read()
 	bottomscreen(iswifion())
-	if scr == 5 and usenightly == 1 then
+	if scr == 5 and forceskeithusage == 1 then
 		isnightly = 1
 		keepconfig = 1
-		installer()
+		--installer()
+		disableforcedskeith()
 	end	
 	if scr == 4 then
 		isnightly = 0
@@ -627,10 +643,10 @@ while true do
 		firstscreen()
 	end
 
-	if scr == -2 then
+	if scr == -2 and (not forceskeithusage == 1) then
 		error("Debug Break")
 	end
-	if scr == -3 then
+	if scr == -3 and (not forceskeithusage == 1) then
 		error("Program ended")
 	end
 

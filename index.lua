@@ -500,6 +500,12 @@ function migrate_changebuild() --Part of the Skeith/Corbenik Updater merge
 	skeithcheckstream = io.open("/corbenik-updater/skeith.reboot",FCREATE)
 	io.write(skeithcheckstream,0,"SkeithCFW", 9)
 	io.close(skeithcheckstream)
+	if System.fileExists("/skeith/firmware/native") then
+		ah,am,as = System.getTime()
+		aday_value,aday,amonth,ayear = System.getDate()
+		System.renameDirectory("/skeith", "/skeith-BACKUP-"..ah..am..as..aday_value..aday..amonth..ayear)	
+	end
+	System.renameDirectory("/corbenik", "/skeith")
 	error("Press A to proceed.") --Restarts into Skeith Updater.
 end
 
