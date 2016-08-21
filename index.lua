@@ -19,7 +19,7 @@ if not System.doesFileExist("/corbenik/firmware/native") and System.doesFileExis
 	end
 end
 
-useupdate = 0
+-- useupdate = 0
 updateserverlua = "http://gs2012.xyz/3ds/corbenikupdater/updatedindex.lua"
 skeithupdateserverlua = "http://gs2012.xyz/3ds/skeithupdater/updatedindex.lua"
 System.createDirectory("/corbenik-updater")
@@ -78,10 +78,10 @@ if System.doesFileExist("/corbenik-updater/useupdate") then
 	if isupdate == 0 then
 		useupdate = 1
 	else
-		useupdate = 0
+		useupdate = 1
 	end
 else
-	useupdate = 0
+	useupdate = 1
 end
 if (Network.isWifiEnabled()) and useupdate == 1 then
 	if System.doesFileExist("/corbenik-updater/updatedindex.lua") then
