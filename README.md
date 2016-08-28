@@ -1,3 +1,7 @@
+#NOTE: This project is now discontinued. Head over to its replacement if you want Corbenik CFW Updater: RE!
+https://github.com/gnmmarechal/corbenik-updater-re
+
+
 # corbenik-updater
 Updater based on LPP-3DS for the Corbenik Custom Firmware
 
